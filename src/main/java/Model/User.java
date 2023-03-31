@@ -4,10 +4,13 @@
  */
 package Model;
 
+import java.awt.Color;
 import java.sql.Date;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import swing.Table.EventAction;
 import swing.Table.ModelAction;
+import swing.Table.ModelBadge;
 import swing.Table.ModelProfile;
 
 /**
@@ -90,14 +93,14 @@ public class User {
     /**
      * @return the Phone
      */
-    public int getPhone() {
+    public String getPhone() {
         return Phone;
     }
 
     /**
      * @param Phone the Phone to set
      */
-    public void setPhone(int Phone) {
+    public void setPhone(String Phone) {
         this.Phone = Phone;
     }
 
@@ -137,10 +140,12 @@ public class User {
     private  String Password;
     private String FulName;
     private Date Birthday;
-    private int Phone;
+    private String Phone;
     private String gender;
     private String Address;
     private String RoleName;
+    private String Email;
+    private String AvartarUrl; 
 
     /**
      * @return the icon
@@ -155,6 +160,7 @@ public class User {
     public void setIcon(Icon icon) {
         this.icon = icon;
     }
+
     
     public User(User user)
     {
@@ -166,7 +172,11 @@ public class User {
         this.Phone = user.Phone;
         this.Address = user.Address;
         this.RoleName = user.RoleName;
-        this.icon = user.icon;
+        this.gender = user.gender;
+        this.Email = user.Email;
+        this.AvartarUrl = user.AvartarUrl;
+        System.out.println(user.AvartarUrl);
+        this.icon = new ImageIcon(getClass().getResource(user.AvartarUrl));
     }
     
     public User()
@@ -174,7 +184,7 @@ public class User {
         
     }
     
-    public User(Icon icon, String FullName, String gender, String Role, int Id,int Phone)
+    public User(Icon icon, String FullName, String gender, String Role, int Id,String Phone)
     {
         this.ID = Id;
         this.FulName = FullName;
@@ -186,7 +196,7 @@ public class User {
     
     public Object[] toRowTable(EventAction event) {
         //DecimalFormat df = new DecimalFormat("$#,##0.00");
-        return new Object[]{new ModelProfile(icon, this.ID), this.FulName, this.gender, this.Phone, this.RoleName ,new ModelAction(this, event)};
+        return new Object[]{new ModelProfile(icon, this.ID), this.FulName, this.gender, this.Phone, new ModelBadge(this.RoleName, new Color (245,118,47), new Color(255,224,187)) ,new ModelAction(this, event)};
     }
 
     /**
@@ -201,5 +211,33 @@ public class User {
      */
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    /**
+     * @return the Email
+     */
+    public String getEmail() {
+        return Email;
+    }
+
+    /**
+     * @param Email the Email to set
+     */
+    public void setEmail(String Email) {
+        this.Email = Email;
+    }
+
+    /**
+     * @return the AvartarUrl
+     */
+    public String getAvartarUrl() {
+        return AvartarUrl;
+    }
+
+    /**
+     * @param AvartarUrl the AvartarUrl to set
+     */
+    public void setAvartarUrl(String AvartarUrl) {
+        this.AvartarUrl = AvartarUrl;
     }
 }

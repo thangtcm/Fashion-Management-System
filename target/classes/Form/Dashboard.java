@@ -4,6 +4,8 @@
  */
 package Form;
 
+import DatabaseDao.User_Dao;
+import DatabaseDaoImpl.User_DaoImpl;
 import Form.SlideForm.*;
 import Model.User;
 import View_Form.MainAdmin;
@@ -27,6 +29,17 @@ public class Dashboard extends javax.swing.JPanel {
      */
     public Dashboard() {
         initComponents();
+        slideshow1.initSlideshow(new Slide1(), new Slide2(), new Slide3(), new Slide4());
+        table1.fixTable(jScrollPane1);
+        initTableData();
+        initDataLine();
+    }
+    
+    public Dashboard(User user)
+    {
+        initComponents();
+        txtName.setText(user.getFulName());
+        txtRoleName.setText(user.getRoleName());
         slideshow1.initSlideshow(new Slide1(), new Slide2(), new Slide3(), new Slide4());
         table1.fixTable(jScrollPane1);
         initTableData();
@@ -88,12 +101,18 @@ public class Dashboard extends javax.swing.JPanel {
         model.addColumn("Số Điện Thoại");
         model.addColumn("Chức Vụ");
         model.addColumn("Chức Năng");
+        User_Dao users = new User_DaoImpl();
+        List<User> userlist = users.getUserList();
+        for(User object : userlist)
+        {
+            model.addRow(new User(object).toRowTable(eventAction));
+        }
         
-        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Trần Cao Minh Thắng", "Male", "Admin", i++, i).toRowTable(eventAction));
-        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Lê Thảo Duyên", "Female", "Admin", i++, i).toRowTable(eventAction));
-        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Lê Ngọc Đình Đình", "Female", "Admin", i++, i).toRowTable(eventAction));
-        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Nguyễn Tuấn Khoa", "Male", "Admin", i++, i).toRowTable(eventAction));
-        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Hồ Lâm Gia Khánh", "Male", "Admin", i++, i).toRowTable(eventAction));
+//        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Trần Cao Minh Thắng", "Male", "Admin", i++, "1").toRowTable(eventAction));
+//        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Lê Thảo Duyên", "Female", "Admin", i++, "2").toRowTable(eventAction));
+//        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Lê Ngọc Đình Đình", "Female", "Admin", i++, "3").toRowTable(eventAction));
+//        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Nguyễn Tuấn Khoa", "Male", "Admin", i++, "4").toRowTable(eventAction));
+//        model.addRow(new User(new ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg")), "Hồ Lâm Gia Khánh", "Male", "Admin", i++, "5").toRowTable(eventAction));
         table1.setModel(model);
     }
     
@@ -135,8 +154,8 @@ public class Dashboard extends javax.swing.JPanel {
         slideshow1 = new swing.SlideShow.Slideshow();
         jPanel5 = new javax.swing.JPanel();
         imageAvatar4 = new swing.Image.ImageAvatar();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        txtName = new javax.swing.JLabel();
+        txtRoleName = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table1 = new swing.Table.Table();
         jLabel2 = new javax.swing.JLabel();
@@ -165,15 +184,14 @@ public class Dashboard extends javax.swing.JPanel {
             .addGroup(panelBorder1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(chartLine1, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chartLine1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(panelBorder1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(cardDashboard4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cardDashboard1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(cardDashboard2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,13 +213,13 @@ public class Dashboard extends javax.swing.JPanel {
         imageAvatar4.setBorderSize(0);
         imageAvatar4.setImage(new javax.swing.ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg"))); // NOI18N
 
-        jLabel6.setFont(new java.awt.Font("Inter", 1, 16)); // NOI18N
-        jLabel6.setText("Trần Cao Minh Thắng");
+        txtName.setFont(new java.awt.Font("Inter", 1, 16)); // NOI18N
+        txtName.setText("Trần Cao Minh Thắng");
 
-        jLabel7.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(181, 180, 180));
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel7.setText("Admin");
+        txtRoleName.setFont(new java.awt.Font("Inter", 0, 14)); // NOI18N
+        txtRoleName.setForeground(new java.awt.Color(181, 180, 180));
+        txtRoleName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        txtRoleName.setText("Admin");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -210,8 +228,8 @@ public class Dashboard extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtRoleName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(imageAvatar4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -222,9 +240,9 @@ public class Dashboard extends javax.swing.JPanel {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel7))
+                        .addComponent(txtRoleName))
                     .addComponent(imageAvatar4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(8, Short.MAX_VALUE))
         );
@@ -270,7 +288,7 @@ public class Dashboard extends javax.swing.JPanel {
                             .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 665, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -287,7 +305,7 @@ public class Dashboard extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -301,12 +319,12 @@ public class Dashboard extends javax.swing.JPanel {
     private swing.Image.ImageAvatar imageAvatar4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private swing.Panel.PanelBorder panelBorder1;
     private swing.SlideShow.Slideshow slideshow1;
     private swing.Table.Table table1;
+    private javax.swing.JLabel txtName;
+    private javax.swing.JLabel txtRoleName;
     // End of variables declaration//GEN-END:variables
 }

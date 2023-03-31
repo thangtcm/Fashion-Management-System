@@ -5,9 +5,26 @@
 package View_Form;
 
 import com.raven.chart.ModelChartLine;
-import java.awt.Color;
+import java.awt.Image;
+import java.awt.Label;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -17,10 +34,28 @@ public class test extends javax.swing.JFrame {
 
     /**
      * Creates new form test
+     * @throws java.security.NoSuchAlgorithmException
      */
-    public test() {
+    public test() throws NoSuchAlgorithmException {
         initComponents();
         initData();
+        String password = "admin@123";
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedhash = digest.digest(
+                password.getBytes(StandardCharsets.UTF_8));
+        System.out.println("My Hash: " + bytesToHex(encodedhash));
+    }
+    
+    public final String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
     
     private void initData() {
@@ -34,7 +69,6 @@ public class test extends javax.swing.JFrame {
         list.add(new ModelChartLine("Friday", 125));
         list.add(new ModelChartLine("Saturday", 80));
         list.add(new ModelChartLine("Sunday", 200));
-        chartLine1.setModel(list);
     }
 
     /**
@@ -46,30 +80,158 @@ public class test extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        chartLine1 = new com.raven.chart.ChartLine();
+        badge1 = new swing.Badge.Badge();
+        badge2 = new swing.Badge.Badge();
+        buttonEdit1 = new swing.Button.ButtonEdit();
+        jLabel1 = new javax.swing.JLabel();
+        buttonEdit2 = new swing.Button.ButtonEdit();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        badge1.setText("Waitting");
+
+        badge2.setText("badge2");
+
+        buttonEdit1.setBackground(new java.awt.Color(231, 231, 231));
+        buttonEdit1.setText("UploadFile");
+        buttonEdit1.setBorderColor(new java.awt.Color(51, 51, 255));
+        buttonEdit1.setColorOver(new java.awt.Color(0, 255, 255));
+        buttonEdit1.setRadius(30);
+        buttonEdit1.setSizeBorder(1);
+        buttonEdit1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEdit1ActionPerformed(evt);
+            }
+        });
+
+        buttonEdit2.setBackground(new java.awt.Color(231, 231, 231));
+        buttonEdit2.setText("Save");
+        buttonEdit2.setBorderColor(new java.awt.Color(51, 51, 255));
+        buttonEdit2.setColorOver(new java.awt.Color(0, 255, 255));
+        buttonEdit2.setRadius(30);
+        buttonEdit2.setSizeBorder(1);
+        buttonEdit2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEdit2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(chartLine1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(294, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(326, 326, 326)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(badge2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(97, 97, 97)
+                        .addComponent(badge1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(271, 271, 271)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(buttonEdit2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(buttonEdit1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
-                .addComponent(chartLine1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(453, Short.MAX_VALUE))
+                .addGap(110, 110, 110)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(badge2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(badge1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(86, 86, 86)
+                .addComponent(buttonEdit1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(157, 157, 157)
+                .addComponent(buttonEdit2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private String NameFile = null;
+    private byte[] dataFile = null;
+    File selectedFile = null;
+    private void buttonEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEdit1ActionPerformed
+        // TODO add your handling code here:
+         JFileChooser file = new JFileChooser();
+         file.setCurrentDirectory(new File(System.getProperty("user.dir")));
+          
+          //filter the files
+          FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg","png");
+          file.addChoosableFileFilter(filter);
+          int result = file.showSaveDialog(null);
+           //if the user click on save in Jfilechooser
+          if(result == JFileChooser.APPROVE_OPTION){
+             selectedFile = file.getSelectedFile();
+             try {
+                dataFile = Files.readAllBytes(selectedFile.toPath());
+                NameFile = selectedFile.getName();
+                String filename = selectedFile.getAbsolutePath();
+                jLabel1.setIcon(ResizeImage(filename, jLabel1));
+             } catch (IOException ex) {
+                 Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
+             }
+          }
+           //if the user click on save in Jfilechooser
+
+
+          else if(result == JFileChooser.CANCEL_OPTION){
+              System.out.println("No File Select");
+          }
+    }//GEN-LAST:event_buttonEdit1ActionPerformed
+
+    private void buttonEdit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEdit2ActionPerformed
+        // TODO add your handling code here:
+        String absolutePath = System.getProperty("user.dir");
+        String extension = FilenameUtils.getExtension(NameFile); 
+        String newName = FilenameUtils.getBaseName(NameFile) + "_" + System.currentTimeMillis() + "." + extension; // tạo tên file mới
+        String PathFile = "\\Images\\Upload\\"+ newName;
+        String Path = absolutePath + "\\src\\main\\java" + PathFile;
+        
+        System.out.println("\n\t FileName : " + NameFile);
+        try {
+            FileInputStream fis = new FileInputStream(selectedFile);
+            byte[] data = new byte[(int) selectedFile.length()];
+            fis.read(data);
+            fis.close();
+            saveFile(data, Path);
+            System.out.println("File uploaded successfully");
+            String fullPath = new File(Path).getAbsolutePath();
+            System.out.println("File saved to: " + fullPath);
+            System.out.println("File saved to: " + PathFile);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        
+    }//GEN-LAST:event_buttonEdit2ActionPerformed
+
+    public void saveFile(byte[] data, String filename) throws IOException {
+        File dir = new File("\\src\\main\\java\\Images\\Upload\\"); // tạo đối tượng File cho thư mục lưu trữ
+        if (!dir.exists()) { // nếu thư mục không tồn tại, tạo mới
+            dir.mkdirs();
+        }
+        FileOutputStream out = new FileOutputStream(filename);
+        out.write(data);
+        out.close();
+    }
+    
+    public ImageIcon ResizeImage(String ImagePath, JLabel label)
+    {
+        ImageIcon MyImage = new ImageIcon(ImagePath);
+        Image img = MyImage.getImage();
+        Image newImg = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon image = new ImageIcon(newImg);
+        return image;
+    }
     /**
      * @param args the command line arguments
      */
@@ -98,14 +260,20 @@ public class test extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
                 new test().setVisible(true);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.raven.chart.ChartLine chartLine1;
+    private swing.Badge.Badge badge1;
+    private swing.Badge.Badge badge2;
+    private swing.Button.ButtonEdit buttonEdit1;
+    private swing.Button.ButtonEdit buttonEdit2;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

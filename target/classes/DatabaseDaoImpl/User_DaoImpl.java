@@ -5,143 +5,201 @@
 package DatabaseDaoImpl;
 
 import DatabaseDao.User_Dao;
+import Enum.TypeNotification;
+import Enum.TypeRoleName;
 import Model.User;
+import Sevices.Notification;
 import dao.Convert;
 import dao.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author couni
  */
 public class User_DaoImpl implements User_Dao{
-    Connection connection = null;
+ 
+    Connection conn = null;
+    PreparedStatement prepStatement= null;
+    ResultSet resultSet = null;
+    Notification notification = new Notification();
     
+    public User_DaoImpl()
+    {
+        conn = new DBConnect().getConnection();
+    }
+    
+    @Override
     public boolean AddUser(User user)
     {
-        PreparedStatement preparedStatement = null;
-        String SQL_AddStaff = "INSERT INTO [User] VALUES (?,?,?,?,?,?,?)";
-        
-        try{
-            connection = DBConnect.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_AddStaff);
-            preparedStatement.setString(1, user.getUserName().trim());
-            preparedStatement.setString(2, user.getPassword().trim());
-            preparedStatement.setString(3, user.getFulName().trim());
-            preparedStatement.setDate(4, Convert.convertDate(user.getBirthday()));
-            preparedStatement.setInt(6, user.getPhone());
-            preparedStatement.setString(6, user.getAddress().trim());
-            preparedStatement.setInt(7, 1);
+        try
+        {
+            String query = "INSERT INTO [User] (UserName, Password, Email, FullName, Birthday, Phone, Address, RoleName, AvatarUrl, Gender) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            addFunction(user, query);
+            int rowsInserted = prepStatement.executeUpdate(); 
+            if (rowsInserted > 0) {
+                notification.showMessage("New user has been added.", TypeNotification.Susscess.toString());
+                return true;
+            } else {
+                notification.showMessage("Failed to add new user.", TypeNotification.Error.toString());
+            }
             
         }
         catch(SQLException e) {
             System.out.println(e.getMessage()); 
         }finally {
             try {
-                if (connection != null) {
-                    connection.close();
+                if (prepStatement != null) {
+                    prepStatement.close();
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(User_DaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
         }
         return false;
     }
+    
+    public void addFunction(User user, String query) {
+        try {
+            prepStatement = conn.prepareStatement(query);
+            int i = 1;
+            prepStatement.setString(i++, user.getUserName().trim());
+            prepStatement.setString(i++, user.getPassword().trim());
+            prepStatement.setString(i++, user.getEmail().trim());
+            prepStatement.setString(i++, user.getFulName().trim());
+            prepStatement.setDate(i++, Convert.convertDate(user.getBirthday()));
+            prepStatement.setString(i++, user.getPhone());
+            prepStatement.setString(i++, user.getAddress().trim());
+            prepStatement.setString(i++, TypeRoleName.Custom.toString());
+            prepStatement.setString(i++, user.getAvartarUrl().trim());
+            prepStatement.setString(i++, user.getGender().trim());
+            prepStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+   
 
     @Override
-    public List<User> getStaffList(User user) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+    public List<User> getUserList() {
 
-        List<User> list = new ArrayList<User>();
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT * FROM [User]";
 
-        /*
-         * Default: displays all student information
-         */
-        StringBuilder SQL_GetStaffInformation = new StringBuilder("SELECT * FROM [User]");
-
-        /*------------------------------------------------------------------------
-         * getStudent_name() : Get it from the information entered by the user.  |
-         * -----------------------------------------------------------------------
-         */
-        if (!user.getFulName().isEmpty())
-        {
-                // If 'getStudent_name()' is null ¡ª¡ª> false (Not execute)
-            SQL_GetStaffInformation.append(" AND FirstName LIKE '%").append(user.getFulName()).append("%' ");
-
-        }
-
-        try
-        {
-            connection = DBConnect.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_GetStaffInformation.toString().replaceFirst("AND","WHERE"));
-
-            resultSet = preparedStatement.executeQuery();
+        try{
+            prepStatement = conn.prepareStatement(sql); 
+            resultSet = prepStatement.executeQuery();
             while (resultSet.next())
             {
                     User table_user = new User();
                     table_user.setID(resultSet.getInt("ID"));
+                    table_user.setUserName(resultSet.getString("UserName").trim());
+                    table_user.setPassword(resultSet.getString("Password").trim());
+                    table_user.setEmail(resultSet.getString("Email"));
                     table_user.setFulName(resultSet.getString("FullName").trim());
-                    table_user.setBirthday(resultSet.getDate("BrithDay"));
+                    table_user.setBirthday(resultSet.getDate("BirthDay"));
+                    table_user.setPhone(resultSet.getString("Phone").trim());
                     table_user.setAddress(resultSet.getString("Address").trim());
-                    table_user.setPhone(resultSet.getInt("Phone"));
-
+                    table_user.setRoleName(resultSet.getString("RoleName").trim());
+                    table_user.setAvartarUrl(resultSet.getString("AvatarUrl"));
+                    table_user.setGender(resultSet.getString("Gender").trim());
+                    
                     list.add(table_user);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        } finally {
+        }finally {
             try {
-                if (connection != null) {
-                    connection.close();
+                if (prepStatement != null) {
+                    prepStatement.close();
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(User_DaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
         }
         return list;
     }
 
     @Override
-    public boolean Delete_Staff(int ID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void Delete_User(User user) {
+        try {
+            String query = "DELETE FROM [User] WHERE ID=?";
+            prepStatement = (PreparedStatement) conn.prepareStatement(query);
+            prepStatement.setInt(1, user.getID());
+            prepStatement.executeUpdate();
+            notification.showMessage("Delete User Successfully.", TypeNotification.Susscess.toString());
+        } catch (SQLException throwables) {
+            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            System.out.println(throwables.getMessage());
+        }finally {
+            try {
+                if (prepStatement != null) {
+                    prepStatement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    
+    @Override
+    public void Update_User(User user) {
+        try {
+            String query = "UPDATE [User] SET Email=?,FullName=?,Birthday=?,Phone=?,Address=?,RoleName=?,AvatarUrl=?,Gender=?, WHERE ID=?";
+            prepStatement = conn.prepareStatement(query);
+            int i= 1;
+            prepStatement.setString(i++, user.getEmail().trim());
+            prepStatement.setString(i++, user.getFulName().trim());
+            prepStatement.setDate(i++, Convert.convertDate(user.getBirthday()));
+            prepStatement.setString(i++, user.getPhone());
+            prepStatement.setString(i++, user.getAddress().trim());
+            prepStatement.setString(i++, user.getRoleName());
+            prepStatement.setString(i++, user.getAvartarUrl().trim());
+            prepStatement.setString(i++, user.getGender().trim());
+            prepStatement.executeUpdate();
+            notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
+        } catch (SQLException throwables) {
+            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            System.out.println(throwables.getMessage());
+        }finally {
+            try {
+                if (prepStatement != null) {
+                    prepStatement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     @Override
-    public boolean Update_Staff(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public User Login_Staff(User user) {
+    public User LoginUser(User user) {
         String SQL_ADMINISTRATOR_LOGIN = "SELECT * FROM [User] WHERE UserName = ? AND Password = ?";
         /*
          * In order to initialize the main interface though the user's personal information.
          */
-        User table_Staff_temp = null;
-
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try
-        {
+        try{
             /*
              * ------------------------------------------------------------------------------
              * 'connection' : Pass SQL statements to objects that manipulate the database	|
              *  From Connection com.YUbuntu.dao.BasicDao.connection 						|
              * ------------------------------------------------------------------------------
              */
-            connection = DBConnect.getConnection();
-            preparedStatement = connection.prepareStatement(SQL_ADMINISTRATOR_LOGIN);
+            
+            prepStatement = conn.prepareStatement(SQL_ADMINISTRATOR_LOGIN);
 
-            preparedStatement.setString(1, user.getUserName());
-            preparedStatement.setString(2, user.getPassword());
-            resultSet = preparedStatement.executeQuery();
+            prepStatement.setString(1, user.getUserName());
+            prepStatement.setString(2, user.getPassword());
+            resultSet = prepStatement.executeQuery();
 
             //Store the user information
             if (resultSet.next())
@@ -150,41 +208,69 @@ public class User_DaoImpl implements User_Dao{
                      * Stores the data of Student_ID and .. so that in order to initialize the main interface though the user's personal information. |
                      *---------------------------------------------------------------------------------------------------------------------------------
                      *///Such as it's be used when change user's password !
-                    table_Staff_temp = new User();
-                    table_Staff_temp.setID(resultSet.getInt("ID"));
-                    table_Staff_temp.setUserName(resultSet.getString("UserName").trim());
-                    table_Staff_temp.setPassword(resultSet.getString("Password").trim());
-                    table_Staff_temp.setFulName(resultSet.getString("FullName").trim());
-                    table_Staff_temp.setBirthday(resultSet.getDate("BrithDay"));
-                    table_Staff_temp.setAddress(resultSet.getString("Address").trim());
-                    table_Staff_temp.setPhone(resultSet.getInt("Phone"));
+                    User table_user = new User();
+                    table_user.setID(resultSet.getInt("ID"));
+                    table_user.setUserName(resultSet.getString("UserName").trim());
+                    table_user.setPassword(resultSet.getString("Password").trim());
+                    table_user.setEmail(resultSet.getString("Email"));
+                    table_user.setFulName(resultSet.getString("FullName").trim());
+                    table_user.setBirthday(resultSet.getDate("BirthDay"));
+                    table_user.setPhone(resultSet.getString("Phone").trim());
+                    table_user.setAddress(resultSet.getString("Address").trim());
+                    table_user.setRoleName(resultSet.getString("RoleName").trim());
+                    table_user.setAvartarUrl(resultSet.getString("AvatarUrl"));
+                    table_user.setGender(resultSet.getString("Gender").trim());
                     //...
+                    return table_user;
             }
-        } catch (Exception e)
+        } catch (SQLException e)
         {
-                System.err.println("ERROR : Fail to check specified information of student from the SQL database !\n");
-                e.printStackTrace();
+                System.err.println("ERROR : Fail to check specified information of user from the SQL database !\n");
+                System.out.println(e.getMessage());
+        }finally {
+            try {
+                if (prepStatement != null) {
+                    prepStatement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
         }		
-        return table_Staff_temp;	
+        return null;
     }
 
     @Override
-    public String ChangePassword(User user, String Password) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-    
-    public boolean ResignerUser(User user)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public void ChangePassword(User user, String Password) {
+        String SQL_ChangePassword = "UPDATE [User] SET Password = ? WHERE ID = ?";
+        try {
+            //The second step: Change the password of user
+            prepStatement = conn.prepareStatement(SQL_ChangePassword);
 
-    @Override
-    public boolean AddStaff(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+            //The value passed in : The new password
+            prepStatement.setString(1, Password);
+            prepStatement.setInt(2, user.getID());
 
-    @Override
-    public User LoginUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            int result = prepStatement.executeUpdate();
+            if (result > 0)
+            {
+                prepStatement.executeUpdate();
+                notification.showMessage("Password has been changed.", TypeNotification.Susscess.toString());
+            }
+            
+        } catch (SQLException ex){
+            System.out.println(ex.getMessage());
+            notification.showMessage("Warning : the old passwrod is error !", TypeNotification.Error.toString());
+        }finally {
+            try {
+                if (prepStatement != null) {
+                    prepStatement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

@@ -10,6 +10,23 @@ package Model;
  */
 public class OrderDetails {
 
+    private int ID;
+    private ProductVariants productVariant;
+    private Order order;
+    private int Stock;
+    private double Price;
+
+    
+    
+    public OrderDetails(OrderDetails orderDetails)
+    {
+        this.ID = orderDetails.ID;
+        this.productVariant = orderDetails.productVariant;
+        this.order = orderDetails.order;
+        this.Stock = orderDetails.Stock;
+        this.Price = orderDetails.Price;
+    }
+    
     /**
      * @return the ID
      */
@@ -25,63 +42,60 @@ public class OrderDetails {
     }
 
     /**
-     * @return the ProductID
+     * @return the productVariant
      */
-    public Products getProductID() {
-        return ProductID;
+    public ProductVariants getProductVariant() {
+        return productVariant;
     }
 
     /**
-     * @param ProductID the ProductID to set
+     * @param productVariant the productVariant to set
      */
-    public void setProductID(Products ProductID) {
-        this.ProductID = ProductID;
+    public void setProductVariant(ProductVariants productVariant) {
+        this.productVariant = productVariant;
     }
 
     /**
-     * @return the Quantity
+     * @return the order
      */
-    public int getQuantity() {
-        return Quantity;
+    public Order getOrder() {
+        return order;
     }
 
     /**
-     * @param Quantity the Quantity to set
+     * @param order the order to set
      */
-    public void setQuantity(int Quantity) {
-        this.Quantity = Quantity;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     /**
-     * @return the TotalPrice
+     * @return the Stock
      */
-    public int getTotalPrice() {
-        return TotalPrice;
+    public int getStock() {
+        return Stock;
     }
 
     /**
-     * @param TotalPrice the TotalPrice to set
+     * @param Stock the Stock to set
      */
-    public void setTotalPrice(int TotalPrice) {
-        this.TotalPrice = TotalPrice;
+    public void setStock(int Stock) {
+        this.Stock = Stock;
     }
 
     /**
-     * @return the Discount
+     * @return the Price
      */
-    public int getDiscount() {
-        return Discount;
+    public double getPrice() {
+        return Price;
     }
 
     /**
-     * @param Discount the Discount to set
+     * @param Price the Price to set
      */
-    public void setDiscount(int Discount) {
-        this.Discount = Discount;
+    public void setPrice(double Price) {
+        this.Price = Price;
     }
-    private int ID;
-    private Products ProductID;
-    private int Quantity;
-    private int TotalPrice;
-    private int Discount;
+    
+    
 }

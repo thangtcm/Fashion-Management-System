@@ -15,29 +15,33 @@ import java.util.logging.Logger;
  * @author couni
  */
 public class DBConnect {
-    public static Connection getConnection() throws SQLException
-    {
-        Connection connect = null;
-        String url = "jdbc:sqlserver://localhost:54499;instance=SQLEXPRESS;databaseName=Fashtion;encrypt=true;trustServerCertificate=true";
-        String username = "sa";
-        String password = "04082002";
-        try{
+    static String url = "jdbc:sqlserver://localhost:54499;instance=SQLEXPRESS;databaseName=Fashtion;encrypt=true;trustServerCertificate=true";
+    static String username = "sa";
+    static String password = "04082002";
+    
+    Connection conn = null;
+    
+    public DBConnect(){
+        try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connect = DriverManager.getConnection(url, username, password);
-            System.out.println("Connect to SQL SERVER Susscess");
-            return connect;
-        }
-        catch(ClassNotFoundException ex)
-        {
+            conn = DriverManager.getConnection(url, username, password);
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
             System.out.println("Connect Database ERROR : ");
-            Logger.getLogger(DBConnect.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBConnect.class.getName()).log(Level.SEVERE, null, e);
         }
-        return connect;
     }
-    public static void main(String[] arg) throws SQLException
-    {
-        Connection connect = getConnection();
-            System.out.println(connect.toString());
-            connect.close();
+    
+    public Connection getConnection() {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            conn = DriverManager.getConnection(url, username, password);
+            System.out.println("Connected successfully.");
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println(e.getMessage());
+            System.out.println("Connect Database ERROR : ");
+            Logger.getLogger(DBConnect.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return conn;
     }
 }

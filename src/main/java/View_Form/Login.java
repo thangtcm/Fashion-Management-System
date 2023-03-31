@@ -5,10 +5,17 @@
 package View_Form;
 
 import DatabaseDaoImpl.User_DaoImpl;
+import Enum.TypeNotification;
 import Model.User;
+import dialog.Message;
+import dialog.NotificationMessage;
 import java.awt.Cursor;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -26,7 +33,7 @@ public class Login extends javax.swing.JFrame {
     
     public boolean validateLogin(){        
         String user = txtUserName.getText().trim();
-        String pass = String.valueOf(txtPassword.getPassword());
+        String pass = String.valueOf(txtPassword.getPassword()).trim();
         boolean action = true;
         if (user.equals("")) {
             txtUserName.setHelperText("Please input user name");
@@ -66,32 +73,43 @@ public class Login extends javax.swing.JFrame {
     }
     
     
-    public void Login()
+    public void Login() throws NoSuchAlgorithmException
     {
         String userName = txtUserName.getText().trim();
-        String pass = txtPassword.getText().trim();
+        String pass = String.valueOf(txtPassword.getPassword()).trim();
         User user_temp = new User();
         user_temp.setUserName(userName);
-        user_temp.setPassword(pass);
+        
+        //Mã hóa password
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(pass.getBytes());
+        byte[] digest = md.digest();
+        String myHash = DatatypeConverter
+                .printHexBinary(digest).toUpperCase();
+        user_temp.setPassword(myHash);
         
         User_DaoImpl user_Dao = new User_DaoImpl();
-        User user = user_Dao.Login_Staff(user_temp);
+        User user = user_Dao.LoginUser(user_temp);
         if(user == null)
         {
-            JOptionPane.showMessageDialog(this, "The user or pass is error.");
+            showMessage("The user or pass is error.", TypeNotification.Error.toString());
         }
         else
         {
-            JOptionPane.showMessageDialog(this,  "Welcome : "  + "Admin" /*+ UserType_selectItem*/ + " : "
-						+ user.getFulName());
+            showMessage("Welcome : "  + "Admin : "+ user.getFulName(), TypeNotification.Susscess.toString());
             //new MainUser("Admin", user).setVisible(true); //--> Đây là khỏi tạo giao diện chính thong qua người dùng
-            new MainUser().setVisible(true);
+            new MainAdmin(user).setVisible(true);
             // Close the interface of login
             this.dispose();
             
         }
     }
 
+    private boolean showMessage(String message, String TypeNotification) {
+        NotificationMessage obj = new NotificationMessage(Login.getFrames()[0], true);
+        obj.showMessage(message, TypeNotification);
+        return obj.isOk();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -321,7 +339,11 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(validateLogin())
         {
-            Login();
+            try {
+                Login();
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
             
     }//GEN-LAST:event_button1ActionPerformed

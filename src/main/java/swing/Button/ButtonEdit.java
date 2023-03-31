@@ -80,7 +80,7 @@ public final class ButtonEdit extends JButton {
 
     public ButtonEdit() {
         //  Init Color
-
+        this.sizeBorder = 2;
         setColor(Color.WHITE);
         colorOver = new Color(179, 250, 160);
         colorClick = new Color(152, 184, 144);
@@ -120,6 +120,9 @@ public final class ButtonEdit extends JButton {
         });
     }
 
+    
+    
+    
     private boolean over;
     private Color color;
     private Color colorOver;
@@ -127,6 +130,7 @@ public final class ButtonEdit extends JButton {
     private Color borderColor;
     private int radius = 0;
     private Color colorForeground = Color.BLACK;
+    private int sizeBorder;
 
     @Override
     protected void paintComponent(Graphics grphcs) {
@@ -137,7 +141,21 @@ public final class ButtonEdit extends JButton {
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
         g2.setColor(getBackground());
         //  Border set 2 Pix
-        g2.fillRoundRect(2, 2, getWidth() - 4, getHeight() - 4, radius, radius);
+        g2.fillRoundRect(this.sizeBorder, this.sizeBorder, getWidth() - this.sizeBorder*2, getHeight() - this.sizeBorder*2, radius, radius);
         super.paintComponent(grphcs);
+    }
+
+    /**
+     * @return the sizeBorder
+     */
+    public int getSizeBorder() {
+        return sizeBorder;
+    }
+
+    /**
+     * @param sizeBorder the sizeBorder to set
+     */
+    public void setSizeBorder(int sizeBorder) {
+        this.sizeBorder = sizeBorder;
     }
 }

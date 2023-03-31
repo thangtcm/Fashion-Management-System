@@ -51,6 +51,17 @@ public class Table extends JTable {
                     }
                     return cell;
 
+                }else if(o instanceof ModelBadge) {
+                    ModelBadge data = (ModelBadge) o;
+                    Badge cell = new Badge(data);
+                    if(selected)
+                    {
+                        cell.setBackground(new Color(239, 244, 255));
+                    }
+                    else{
+                        cell.setBackground(Color.WHITE);
+                    }
+                    return cell;
                 } else if (o instanceof ModelAction) {
                     ModelAction data = (ModelAction) o;
                     Action cell = new Action(data, i);
@@ -60,7 +71,8 @@ public class Table extends JTable {
                         cell.setBackground(Color.WHITE);
                     }
                     return cell;
-                } else {
+                }
+                else {
                     Component com = super.getTableCellRendererComponent(jtable, o, selected, focus, i, i1);
                     setBorder(noFocusBorder);
                     com.setForeground(new Color(102, 102, 102));

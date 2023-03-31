@@ -4,8 +4,8 @@
  */
 package View_Form;
 import Form.Dashboard;
-import Form.MainForm;
 import Form.ProfileEdit;
+import Model.User;
 import java.awt.Component;
 
 /**
@@ -21,6 +21,15 @@ public class MainAdmin extends javax.swing.JFrame {
         initComponents();
         showForm(new Dashboard());
     }
+    
+    public MainAdmin(User user)
+    {
+        initComponents();
+        showForm(new Dashboard(user));
+        System.out.println(user.getFulName());
+        menuAdmin1.setName(user.getFulName());
+    }
+   
     
     private void showForm(Component com) {
         body.removeAll();
@@ -43,6 +52,7 @@ public class MainAdmin extends javax.swing.JFrame {
         body = new javax.swing.JLayeredPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Management Fastion System");
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -128,10 +138,8 @@ public class MainAdmin extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainAdmin().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainAdmin().setVisible(true);
         });
     }
 

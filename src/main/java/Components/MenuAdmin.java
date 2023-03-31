@@ -8,6 +8,7 @@ import Event.EventMenu;
 import Event.EventMenuCallBack;
 import Event.EventMenuSelected;
 import Model.Model_Menu;
+import Model.User;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -37,7 +38,15 @@ public class MenuAdmin extends javax.swing.JPanel {
     public MenuAdmin() {
         initComponents();
         init();
+//        
     }
+    
+    @Override
+    public void setName(String Name)
+    {
+        account1.setName(Name);
+    }
+    
     
     private void init(){
         initData();
@@ -77,6 +86,7 @@ public class MenuAdmin extends javax.swing.JPanel {
         animator.setDeceleration(0.5f);  
         
     }
+    
     
     public void setSelectedIndex(int index) {
         selectedIndex = index;

@@ -54,7 +54,7 @@ public class Message extends javax.swing.JDialog {
     }
 
     public void showMessage(String message) {
-        lbMessage.setText(message);
+        lbMessage.setText(message);    
         animator.start();
         setVisible(true);
     }

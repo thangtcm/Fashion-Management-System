@@ -4,26 +4,14 @@
  */
 package Model;
 
-
 /**
  *
  * @author couni
  */
 public class ProductSize {
-
-    /**
-     * @return the Size
-     */
-    public String getSize() {
-        return Size;
-    }
-
-    /**
-     * @param Size the Size to set
-     */
-    public void setSize(String Size) {
-        this.Size = Size;
-    }
+    private int ID;
+    private ProductVariants ProductVariantID;
+    private String SizeName;
 
     /**
      * @return the ID
@@ -40,52 +28,32 @@ public class ProductSize {
     }
 
     /**
-     * @return the ProductID
+     * @return the ProductVariantID
      */
-    public Products getProductID() {
-        return ProductID;
+    public ProductVariants getProductVariantID() {
+        return ProductVariantID;
     }
 
     /**
-     * @param ProductID the ProductID to set
+     * @param ProductVariantID the ProductVariantID to set
      */
-    public void setProductID(Products ProductID) {
-        this.ProductID = ProductID;
+    public void setProductVariantID(ProductVariants ProductVariantID) {
+        this.ProductVariantID = ProductVariantID;
     }
 
     /**
-     * @return the PriceSize
+     * @return the SizeName
      */
-    public int getPriceSize() {
-        return PriceSize;
+    public String getSizeName() {
+        return SizeName;
     }
 
     /**
-     * @param PriceSize the PriceSize to set
+     * @param SizeName the SizeName to set
      */
-    public void setPriceSize(int PriceSize) {
-        this.PriceSize = PriceSize;
-    }
-
-    /**
-     * @return the Quantity
-     */
-    public int getQuantity() {
-        return Quantity;
+    public void setSizeName(String SizeName) {
+        this.SizeName = SizeName;
     }
     
-    /**
-     * @param Quantity the Quantity to set
-     */
-    public void setQuantity(int Quantity) {
-        this.Quantity = Quantity;
-    }
-    private int ID;
-    private Products ProductID;
-//    private enum Size{
-//        SMALL, MEDIUM, LARGE, EXTRALARGE
-//    }// Size.SMALL.ToSring()
-    private String Size;
-    private int PriceSize;
-    private int Quantity;
+    
 }

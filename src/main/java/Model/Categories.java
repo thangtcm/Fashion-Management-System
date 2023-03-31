@@ -39,19 +39,19 @@ public class Categories {
     }
 
     /**
-     * @return the Decription
+     * @return the 
      */
-    public String getDecription() {
-        return Decription;
+    public String getDescription() {
+        return Description;
     }
 
     /**
-     * @param Decription the Decription to set
+     * @param Description the  to set
      */
-    public void setDecription(String Decription) {
-        this.Decription = Decription;
+    public void setDescription(String Description) {
+        this.Description = Description;
     }
     private int ID;
     private String CategoriesName;
-    private String Decription;
+    private String Description;
 }

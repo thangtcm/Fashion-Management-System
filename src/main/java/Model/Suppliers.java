@@ -41,32 +41,32 @@ public class Suppliers {
     /**
      * @return the ContractName
      */
-    public String getContractName() {
-        return ContractName;
+    public String getAddress() {
+        return Address;
     }
 
     /**
-     * @param ContractName the ContractName to set
+     * @param Address the ContractName to set
      */
-    public void setContractName(String ContractName) {
-        this.ContractName = ContractName;
+    public void setAddress(String Address) {
+        this.Address = Address;
     }
 
     /**
      * @return the Phone
      */
-    public int getPhone() {
+    public String getPhone() {
         return Phone;
     }
 
     /**
      * @param Phone the Phone to set
      */
-    public void setPhone(int Phone) {
+    public void setPhone(String Phone) {
         this.Phone = Phone;
     }
     private int ID;
     private String CompayName;
-    private String ContractName;
-    private int Phone;
+    private String Address;
+    private String Phone;
 }
