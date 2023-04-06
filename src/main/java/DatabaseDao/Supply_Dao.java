@@ -12,7 +12,7 @@ import java.util.List;
  * @author couni
  */
 public interface Supply_Dao {
-    public List<Suppliers> getSupplyList();
+    public ArrayList<Suppliers> getSupplyList(Suppliers supply);
     
     public boolean AddSupply(Suppliers supply);
     

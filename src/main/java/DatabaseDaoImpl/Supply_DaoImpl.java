@@ -47,8 +47,8 @@ public class Supply_DaoImpl implements Supply_Dao{
         }
     }
     @Override
-    public List<Suppliers> getSupplyList() {
-        List<Suppliers> list = new ArrayList<>();
+    public ArrayList<Suppliers> getSupplyList(Suppliers suppliers) {
+        ArrayList<Suppliers> list = new ArrayList<>();
         //Lấy Toàn bộ Products và Categories và Supplyer có liên quan
         String sql = "SELECT * FROM [Suppliers]";
         try{

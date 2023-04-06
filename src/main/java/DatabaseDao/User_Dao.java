@@ -12,13 +12,13 @@ import java.util.List;
  * @author couni
  */
 public interface User_Dao {
-    public List<User> getUserList();
+    public ArrayList<User> getUserList(User user);
     
     public boolean AddUser(User user);
     
     public void Delete_User(User user);
     
-    public void Update_User(User user);
+    public boolean Update_User(User user);
     
     public User LoginUser(User user);
     

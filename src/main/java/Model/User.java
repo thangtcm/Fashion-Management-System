@@ -22,14 +22,14 @@ public class User {
     /**
      * @return the ID
      */
-    public int getID() {
+    public Integer getID() {
         return ID;
     }
 
     /**
      * @param ID the ID to set
      */
-    public void setID(int ID) {
+    public void setID(Integer ID) {
         this.ID = ID;
     }
 
@@ -62,17 +62,17 @@ public class User {
     }
 
     /**
-     * @return the FulName
+     * @return the FullName
      */
-    public String getFulName() {
-        return FulName;
+    public String getFullName() {
+        return FullName;
     }
 
     /**
-     * @param FulName the FulName to set
+     * @param FullName the FullName to set
      */
-    public void setFulName(String FulName) {
-        this.FulName = FulName;
+    public void setFullName(String FullName) {
+        this.FullName = FullName;
     }
 
     /**
@@ -135,10 +135,10 @@ public class User {
     
     
     private Icon icon;
-    private int ID;
+    private Integer ID;
     private String UserName;
-    private  String Password;
-    private String FulName;
+    private String Password;
+    private String FullName;
     private Date Birthday;
     private String Phone;
     private String gender;
@@ -167,7 +167,7 @@ public class User {
         this.ID = user.ID;
         this.UserName = user.UserName;
         this.Password = user.Password;
-        this.FulName = user.FulName;
+        this.FullName = user.FullName;
         this.Birthday = user.Birthday;
         this.Phone = user.Phone;
         this.Address = user.Address;
@@ -187,7 +187,7 @@ public class User {
     public User(Icon icon, String FullName, String gender, String Role, int Id,String Phone)
     {
         this.ID = Id;
-        this.FulName = FullName;
+        this.FullName = FullName;
         this.gender = gender;
         this.Phone = Phone;
         this.RoleName = Role;
@@ -196,7 +196,7 @@ public class User {
     
     public Object[] toRowTable(EventAction event) {
         //DecimalFormat df = new DecimalFormat("$#,##0.00");
-        return new Object[]{new ModelProfile(icon, this.ID), this.FulName, this.gender, this.Phone, new ModelBadge(this.RoleName, new Color (245,118,47), new Color(255,224,187)) ,new ModelAction(this, event)};
+        return new Object[]{new ModelProfile(icon, this.ID), this.FullName, this.gender, this.Phone, new ModelBadge(this.RoleName, new Color (245,118,47), new Color(255,224,187)) ,new ModelAction(this, event)};
     }
 
     /**

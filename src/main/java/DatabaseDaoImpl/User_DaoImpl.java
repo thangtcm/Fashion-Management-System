@@ -72,7 +72,7 @@ public class User_DaoImpl implements User_Dao{
             prepStatement.setString(i++, user.getUserName().trim());
             prepStatement.setString(i++, user.getPassword().trim());
             prepStatement.setString(i++, user.getEmail().trim());
-            prepStatement.setString(i++, user.getFulName().trim());
+            prepStatement.setString(i++, user.getFullName().trim());
             prepStatement.setDate(i++, Convert.convertDate(user.getBirthday()));
             prepStatement.setString(i++, user.getPhone());
             prepStatement.setString(i++, user.getAddress().trim());
@@ -87,13 +87,24 @@ public class User_DaoImpl implements User_Dao{
    
 
     @Override
-    public List<User> getUserList() {
+    public ArrayList<User> getUserList(User user) {
 
-        List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM [User]";
+        ArrayList<User> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM [User]");
+        if(user != null)
+        {
+            if(user.getNumberPhone() != null)
+            {
+                sql.append(" AND Phone LIKE '%").append(user.getNumberPhone()).append("%'");
+            }
 
+            if(user.getFullName() != null)
+            {
+                sql.append(" AND FullName LIKE N'").append(StringHandle.addWildcards(user.getFullName())).append("'");
+            } 
+        }
         try{
-            prepStatement = conn.prepareStatement(sql); 
+            prepStatement = conn.prepareStatement(sql.toString().replaceFirst("AND", "WHERE")); 
             resultSet = prepStatement.executeQuery();
             while (resultSet.next())
             {
@@ -102,7 +113,7 @@ public class User_DaoImpl implements User_Dao{
                     table_user.setUserName(resultSet.getString("UserName").trim());
                     table_user.setPassword(resultSet.getString("Password").trim());
                     table_user.setEmail(resultSet.getString("Email"));
-                    table_user.setFulName(resultSet.getString("FullName").trim());
+                    table_user.setFullName(resultSet.getString("FullName").trim());
                     table_user.setBirthday(resultSet.getDate("BirthDay"));
                     table_user.setPhone(resultSet.getString("Phone").trim());
                     table_user.setAddress(resultSet.getString("Address").trim());
@@ -152,23 +163,23 @@ public class User_DaoImpl implements User_Dao{
     }
     
     @Override
-    public void Update_User(User user) {
+    public boolean Update_User(User user) {
         try {
             String query = "UPDATE [User] SET Email=?,FullName=?,Birthday=?,Phone=?,Address=?,RoleName=?,AvatarUrl=?,Gender=?, WHERE ID=?";
             prepStatement = conn.prepareStatement(query);
             int i= 1;
             prepStatement.setString(i++, user.getEmail().trim());
-            prepStatement.setString(i++, user.getFulName().trim());
+            prepStatement.setString(i++, user.getFullName().trim());
             prepStatement.setDate(i++, Convert.convertDate(user.getBirthday()));
             prepStatement.setString(i++, user.getPhone());
             prepStatement.setString(i++, user.getAddress().trim());
             prepStatement.setString(i++, user.getRoleName());
             prepStatement.setString(i++, user.getAvartarUrl().trim());
             prepStatement.setString(i++, user.getGender().trim());
-            prepStatement.executeUpdate();
-            notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
+            return prepStatement.executeUpdate() > 0;
+            //notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            //notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
             System.out.println(throwables.getMessage());
         }finally {
             try {
@@ -179,6 +190,7 @@ public class User_DaoImpl implements User_Dao{
                 System.out.println(e.getMessage());
             }
         }
+        return false;
     }
 
     @Override
@@ -213,7 +225,7 @@ public class User_DaoImpl implements User_Dao{
                     table_user.setUserName(resultSet.getString("UserName").trim());
                     table_user.setPassword(resultSet.getString("Password").trim());
                     table_user.setEmail(resultSet.getString("Email"));
-                    table_user.setFulName(resultSet.getString("FullName").trim());
+                    table_user.setFullName(resultSet.getString("FullName").trim());
                     table_user.setBirthday(resultSet.getDate("BirthDay"));
                     table_user.setPhone(resultSet.getString("Phone").trim());
                     table_user.setAddress(resultSet.getString("Address").trim());
