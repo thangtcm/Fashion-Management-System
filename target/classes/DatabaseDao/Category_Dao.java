@@ -5,14 +5,14 @@
 package DatabaseDao;
 
 import Model.Categories;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author couni
  */
 public interface Category_Dao {
-    public List<Categories> getCategoryList();
+    public ArrayList<Categories> getCategoryList();
     
     public boolean AddCategory(Categories category);
     

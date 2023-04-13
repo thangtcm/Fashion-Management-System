@@ -8,16 +8,15 @@ import DatabaseDao.User_Dao;
 import Enum.TypeNotification;
 import Enum.TypeRoleName;
 import Model.User;
-import Sevices.Notification;
+import static Services.Notification.showMessage;
+import Services.StringHandle;
 import dao.Convert;
 import dao.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -28,7 +27,6 @@ public class User_DaoImpl implements User_Dao{
     Connection conn = null;
     PreparedStatement prepStatement= null;
     ResultSet resultSet = null;
-    Notification notification = new Notification();
     
     public User_DaoImpl()
     {
@@ -40,19 +38,22 @@ public class User_DaoImpl implements User_Dao{
     {
         try
         {
-            String query = "INSERT INTO [User] (UserName, Password, Email, FullName, Birthday, Phone, Address, RoleName, AvatarUrl, Gender) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            String query = "INSERT INTO [User] ([UserName], Password, Email, FullName, Birthday, Phone, Address, RoleName, AvatarUrl, Gender) VALUES (?,?,?,?,?,?,?,?,?,?)";
             addFunction(user, query);
             int rowsInserted = prepStatement.executeUpdate(); 
-            if (rowsInserted > 0) {
-                notification.showMessage("New user has been added.", TypeNotification.Susscess.toString());
-                return true;
-            } else {
-                notification.showMessage("Failed to add new user.", TypeNotification.Error.toString());
-            }
-            
+            return rowsInserted > 0;
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage()); 
+            if(e.getErrorCode() == 2601) // Unique constraint violation error number
+            {
+                showMessage("Tên tài khoản đã tồn tại", TypeNotification.Error);
+            }
+            else
+            {
+                showMessage("Đăng ký tài khoản thất bại", TypeNotification.Error);
+                System.out.println("DatabaseDaoImpl.User_DaoImpl.AddUser() " + e.getMessage());
+            }
+            return false;
         }finally {
             try {
                 if (prepStatement != null) {
@@ -62,7 +63,6 @@ public class User_DaoImpl implements User_Dao{
                 System.out.println(e.getMessage());
             }
         }
-        return false;
     }
     
     public void addFunction(User user, String query) {
@@ -72,14 +72,13 @@ public class User_DaoImpl implements User_Dao{
             prepStatement.setString(i++, user.getUserName().trim());
             prepStatement.setString(i++, user.getPassword().trim());
             prepStatement.setString(i++, user.getEmail().trim());
-            prepStatement.setString(i++, user.getFulName().trim());
+            prepStatement.setString(i++, user.getFullName().trim());
             prepStatement.setDate(i++, Convert.convertDate(user.getBirthday()));
             prepStatement.setString(i++, user.getPhone());
             prepStatement.setString(i++, user.getAddress().trim());
             prepStatement.setString(i++, TypeRoleName.Custom.toString());
             prepStatement.setString(i++, user.getAvartarUrl().trim());
             prepStatement.setString(i++, user.getGender().trim());
-            prepStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -87,13 +86,23 @@ public class User_DaoImpl implements User_Dao{
    
 
     @Override
-    public List<User> getUserList() {
-
-        List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM [User]";
-
+    public ArrayList<User> getUserList(User user) {
+        ArrayList<User> list = new ArrayList<>();
+        list.clear();
+        StringBuilder sql = new StringBuilder("SELECT * FROM [User]");
+        if(user != null)
+        {
+            if(user.getFullName() != null)
+            {
+                sql.append(" AND FullName LIKE N'").append(StringHandle.addWildcards(user.getFullName())).append("'");
+            }
+            if(!user.getRoleName().trim().equals(TypeRoleName.None.toString()))
+            {
+                sql.append(" AND RoleName LIKE N'").append(StringHandle.addWildcards(user.getRoleName())).append("'");
+            } 
+        }
         try{
-            prepStatement = conn.prepareStatement(sql); 
+            prepStatement = conn.prepareStatement(sql.toString().replaceFirst("AND", "WHERE")); 
             resultSet = prepStatement.executeQuery();
             while (resultSet.next())
             {
@@ -102,14 +111,13 @@ public class User_DaoImpl implements User_Dao{
                     table_user.setUserName(resultSet.getString("UserName").trim());
                     table_user.setPassword(resultSet.getString("Password").trim());
                     table_user.setEmail(resultSet.getString("Email"));
-                    table_user.setFulName(resultSet.getString("FullName").trim());
+                    table_user.setFullName(resultSet.getString("FullName").trim());
                     table_user.setBirthday(resultSet.getDate("BirthDay"));
                     table_user.setPhone(resultSet.getString("Phone").trim());
                     table_user.setAddress(resultSet.getString("Address").trim());
                     table_user.setRoleName(resultSet.getString("RoleName").trim());
                     table_user.setAvartarUrl(resultSet.getString("AvatarUrl"));
                     table_user.setGender(resultSet.getString("Gender").trim());
-                    
                     list.add(table_user);
             }
         } catch (SQLException e) {
@@ -130,15 +138,15 @@ public class User_DaoImpl implements User_Dao{
     }
 
     @Override
-    public void Delete_User(User user) {
+    public void Delete_User(int Id) {
         try {
             String query = "DELETE FROM [User] WHERE ID=?";
             prepStatement = (PreparedStatement) conn.prepareStatement(query);
-            prepStatement.setInt(1, user.getID());
+            prepStatement.setInt(1, Id);
             prepStatement.executeUpdate();
-            notification.showMessage("Delete User Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Delete User Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {
@@ -154,21 +162,22 @@ public class User_DaoImpl implements User_Dao{
     @Override
     public void Update_User(User user) {
         try {
-            String query = "UPDATE [User] SET Email=?,FullName=?,Birthday=?,Phone=?,Address=?,RoleName=?,AvatarUrl=?,Gender=?, WHERE ID=?";
+            String query = "UPDATE [User] SET Email=?,FullName=?,Birthday=?,Phone=?,Address=?,RoleName=?,AvatarUrl=?,Gender=? WHERE ID = ?";
             prepStatement = conn.prepareStatement(query);
             int i= 1;
             prepStatement.setString(i++, user.getEmail().trim());
-            prepStatement.setString(i++, user.getFulName().trim());
+            prepStatement.setString(i++, user.getFullName().trim());
             prepStatement.setDate(i++, Convert.convertDate(user.getBirthday()));
             prepStatement.setString(i++, user.getPhone());
             prepStatement.setString(i++, user.getAddress().trim());
             prepStatement.setString(i++, user.getRoleName());
             prepStatement.setString(i++, user.getAvartarUrl().trim());
             prepStatement.setString(i++, user.getGender().trim());
+            prepStatement.setInt(i++, user.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Updated Information Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Error);
             System.out.println(throwables.getMessage());
         }finally {
             try {
@@ -184,44 +193,27 @@ public class User_DaoImpl implements User_Dao{
     @Override
     public User LoginUser(User user) {
         String SQL_ADMINISTRATOR_LOGIN = "SELECT * FROM [User] WHERE UserName = ? AND Password = ?";
-        /*
-         * In order to initialize the main interface though the user's personal information.
-         */
         try{
-            /*
-             * ------------------------------------------------------------------------------
-             * 'connection' : Pass SQL statements to objects that manipulate the database	|
-             *  From Connection com.YUbuntu.dao.BasicDao.connection 						|
-             * ------------------------------------------------------------------------------
-             */
-            
             prepStatement = conn.prepareStatement(SQL_ADMINISTRATOR_LOGIN);
 
             prepStatement.setString(1, user.getUserName());
             prepStatement.setString(2, user.getPassword());
             resultSet = prepStatement.executeQuery();
-
-            //Store the user information
             if (resultSet.next())
             {		
-                    /*---------------------------------------------------------------------------------------------------------------------------------
-                     * Stores the data of Student_ID and .. so that in order to initialize the main interface though the user's personal information. |
-                     *---------------------------------------------------------------------------------------------------------------------------------
-                     *///Such as it's be used when change user's password !
-                    User table_user = new User();
-                    table_user.setID(resultSet.getInt("ID"));
-                    table_user.setUserName(resultSet.getString("UserName").trim());
-                    table_user.setPassword(resultSet.getString("Password").trim());
-                    table_user.setEmail(resultSet.getString("Email"));
-                    table_user.setFulName(resultSet.getString("FullName").trim());
-                    table_user.setBirthday(resultSet.getDate("BirthDay"));
-                    table_user.setPhone(resultSet.getString("Phone").trim());
-                    table_user.setAddress(resultSet.getString("Address").trim());
-                    table_user.setRoleName(resultSet.getString("RoleName").trim());
-                    table_user.setAvartarUrl(resultSet.getString("AvatarUrl"));
-                    table_user.setGender(resultSet.getString("Gender").trim());
-                    //...
-                    return table_user;
+                User table_user = new User();
+                table_user.setID(resultSet.getInt("ID"));
+                table_user.setUserName(resultSet.getString("UserName").trim());
+                table_user.setPassword(resultSet.getString("Password").trim());
+                table_user.setEmail(resultSet.getString("Email"));
+                table_user.setFullName(resultSet.getString("FullName").trim());
+                table_user.setBirthday(resultSet.getDate("BirthDay"));
+                table_user.setPhone(resultSet.getString("Phone").trim());
+                table_user.setAddress(resultSet.getString("Address").trim());
+                table_user.setRoleName(resultSet.getString("RoleName").trim());
+                table_user.setAvartarUrl(resultSet.getString("AvatarUrl"));
+                table_user.setGender(resultSet.getString("Gender").trim());
+                return table_user;
             }
         } catch (SQLException e)
         {
@@ -246,23 +238,18 @@ public class User_DaoImpl implements User_Dao{
     public void ChangePassword(User user, String Password) {
         String SQL_ChangePassword = "UPDATE [User] SET Password = ? WHERE ID = ?";
         try {
-            //The second step: Change the password of user
             prepStatement = conn.prepareStatement(SQL_ChangePassword);
-
-            //The value passed in : The new password
             prepStatement.setString(1, Password);
             prepStatement.setInt(2, user.getID());
-
             int result = prepStatement.executeUpdate();
             if (result > 0)
             {
                 prepStatement.executeUpdate();
-                notification.showMessage("Password has been changed.", TypeNotification.Susscess.toString());
+                showMessage("Password has been changed.", TypeNotification.Success);
             }
-            
         } catch (SQLException ex){
             System.out.println(ex.getMessage());
-            notification.showMessage("Warning : the old passwrod is error !", TypeNotification.Error.toString());
+            showMessage("Warning : the old passwrod is error !", TypeNotification.Error);
         }finally {
             try {
                 if (prepStatement != null) {
@@ -272,5 +259,44 @@ public class User_DaoImpl implements User_Dao{
                 System.out.println(e.getMessage());
             }
         }
+    }
+    
+    @Override
+    public User getUser(int Id)
+    {
+        try {
+            String query = "SELECT * FROM [User] Where ID = ?";
+            prepStatement = conn.prepareStatement(query);
+            prepStatement.setInt(1, Id);
+            resultSet = prepStatement.executeQuery();
+            while(resultSet.next())
+            {
+                User table_user = new User();
+                table_user.setID(resultSet.getInt("ID"));
+                table_user.setEmail(resultSet.getString("Email"));
+                table_user.setFullName(resultSet.getString("FullName").trim());
+                table_user.setBirthday(resultSet.getDate("BirthDay"));
+                table_user.setPhone(resultSet.getString("Phone").trim());
+                table_user.setAddress(resultSet.getString("Address").trim());
+                table_user.setRoleName(resultSet.getString("RoleName").trim());
+                table_user.setAvartarUrl(resultSet.getString("AvatarUrl"));
+                table_user.setGender(resultSet.getString("Gender").trim());
+                return table_user;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage()); 
+        }finally {
+            try {
+                if (prepStatement != null) {
+                    prepStatement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
     }
 }

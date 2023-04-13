@@ -51,6 +51,22 @@ public class Categories {
     public void setDescription(String Description) {
         this.Description = Description;
     }
+    
+    public Categories(String Name)
+    {
+        this.CategoriesName = Name;
+    }
+    
+    public Categories()
+    {
+        
+    }
+    
+    @Override
+    public String toString()
+    {
+        return this.CategoriesName;
+    }
     private int ID;
     private String CategoriesName;
     private String Description;

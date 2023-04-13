@@ -8,13 +8,13 @@ import DatabaseDao.ProductVariant_Dao;
 import DatabaseDao.Product_Dao;
 import Enum.TypeNotification;
 import Model.ProductVariants;
-import Sevices.Notification;
+import Services.Notification;
+import static Services.Notification.showMessage;
 import dao.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,23 +26,16 @@ public class ProductVariant_DaoImpl implements ProductVariant_Dao{
 
     Connection conn = null;
     PreparedStatement prepStatement= null;
-    Statement statement = null;
     ResultSet resultSet = null;
     
-    Notification notification= new Notification();
     public ProductVariant_DaoImpl()
     {
-        try {
-            conn = new DBConnect().getConnection();
-            statement = conn.createStatement();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+        conn = new DBConnect().getConnection();
     }
     
     @Override
-    public List<ProductVariants> getProductVariantList(int ID) {
-        List<ProductVariants> list = new ArrayList<>();
+    public ArrayList<ProductVariants> getProductVariantList(int ID) {
+        ArrayList<ProductVariants> list = new ArrayList<>();
         //Lấy Toàn bộ Products và Categories và Supplyer có liên quan
         String query = "Select * From [ProductVariants] Where ProductID = ?";
         
@@ -57,7 +50,7 @@ public class ProductVariant_DaoImpl implements ProductVariant_Dao{
                     table_productVariant.setID(resultSet.getInt("ID"));
                     Product_Dao product = new Product_DaoImpl();
                     table_productVariant.setProduct(product.getProducts(ID));
-                    
+                    table_productVariant.setPrice(resultSet.getDouble("Price"));
                     table_productVariant.setSize(resultSet.getString("Size"));
                     table_productVariant.setStock(resultSet.getInt("Stock"));
                     list.add(table_productVariant);
@@ -84,31 +77,21 @@ public class ProductVariant_DaoImpl implements ProductVariant_Dao{
         try
         {
             String query = "INSERT INTO [ProductVariants] (ProductID, Size, Price, Stock) VALUES (?,?,?,?)";
-            resultSet = statement.executeQuery(query);
-            if (resultSet.next())
-                //notification.showMessage("ProductImage already exists.", TypeNotification.Error.toString());
-                System.out.println("ProductVariants already exists.");
-            else
-            {
-                addFunction(productVariant, query);
-                int rowsInserted = prepStatement.executeUpdate();
-                if (rowsInserted > 0) {
-                    System.out.println("New ProductVariants has been added.");
-                    //notification.showMessage("New ProductImage has been added.", TypeNotification.Susscess.toString());
-                    return true;
-                }
+            addFunction(productVariant, query);
+            int rowsInserted = prepStatement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("New ProductVariants has been added.");
+                //notification.showMessage("New ProductImage has been added.", TypeNotification.Success.toString());
+                return true;
             }
             
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage()); 
+            System.out.println("Product Variant " + e.getMessage()); 
         }finally {
             try {
                 if (prepStatement != null) {
                     prepStatement.close();
-                }
-                if (resultSet != null) {
-                    resultSet.close();
                 }
                 } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -126,7 +109,6 @@ public class ProductVariant_DaoImpl implements ProductVariant_Dao{
             prepStatement.setString(i++, productVariant.getSize().trim());
             prepStatement.setDouble(i++, productVariant.getPrice());
             prepStatement.setInt(i++, productVariant.getStock());
-            prepStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -139,9 +121,9 @@ public class ProductVariant_DaoImpl implements ProductVariant_Dao{
             prepStatement = (PreparedStatement) conn.prepareStatement(query);
             prepStatement.setInt(1, productVariant.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Delete ProductVariants Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Delete ProductVariants Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {
@@ -200,9 +182,9 @@ public class ProductVariant_DaoImpl implements ProductVariant_Dao{
             addFunction(productVariant, query);
             prepStatement.setInt(5, productVariant.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
+            Notification.showMessage("Updated Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {

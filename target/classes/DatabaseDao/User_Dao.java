@@ -5,22 +5,24 @@
 package DatabaseDao;
 
 import Model.User;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author couni
  */
 public interface User_Dao {
-    public List<User> getUserList();
+    public ArrayList<User> getUserList(User user);
     
     public boolean AddUser(User user);
     
-    public void Delete_User(User user);
+    public void Delete_User(int Id);
     
     public void Update_User(User user);
     
     public User LoginUser(User user);
+    
+    public User getUser(int Id);
     
     public void ChangePassword(User user, String Password);
 }

@@ -4,21 +4,28 @@
  */
 package Model;
 
+import DatabaseDao.Category_Dao;
+import DatabaseDaoImpl.Category_DaoImpl;
 import java.util.ArrayList;
 import java.util.List;
+import swing.TableBuild.EventAction;
+import swing.TableBuild.ModelAction;
 
 /**
  *
  * @author couni
  */
 public class Products {
-    private int ID;
+    private Integer ID;
     private String ProductName;
     private Suppliers SupplerID;
-    private Categories CategoryID;
+    private Categories Category;
+    private Integer CategoryID;
     private String Description;
     private boolean Status;
     private double Sale;
+    private int Stock;
+    
     
     //Toàn bộ Image về sản phẩm
     private List<ProductImage> productImages;
@@ -47,17 +54,32 @@ public class Products {
         
     }
     
+    public Products(String ProductsName, Integer CategoryID)
+    {
+        this.ProductName = ProductsName;
+        this.CategoryID = CategoryID;
+    }
+    
+    public Object[] toRowTable(EventAction event) {
+        String NameStatus;
+        if(this.Status)
+            NameStatus = "Activity";
+        else
+            NameStatus = "Inactive";
+        return new Object[]{this.ID, this.ProductName, NameStatus, this.Sale, this.Stock ,new ModelAction(this, event)};
+    }
+    
     /**
      * @return the ID
      */
-    public int getID() {
+    public Integer getID() {
         return ID;
     }
 
     /**
      * @param ID the ID to set
      */
-    public void setID(int ID) {
+    public void setID(Integer ID) {
         this.ID = ID;
     }
 
@@ -65,6 +87,8 @@ public class Products {
      * @return the ProductName
      */
     public String getProductName() {
+        if(this.ProductName == null || this.ProductName.trim().isEmpty())
+            return null;
         return ProductName;
     }
 
@@ -89,18 +113,12 @@ public class Products {
         this.SupplerID = SupplerID;
     }
 
-    /**
-     * @return the CategoryID
-     */
-    public Categories getCategoryID() {
-        return CategoryID;
+    public Categories getCategory() {
+        return this.Category;
     }
 
-    /**
-     * @param CategoryID the CategoryID to set
-     */
-    public void setCategoryID(Categories CategoryID) {
-        this.CategoryID = CategoryID;
+    public void setCategory(Categories Category) {
+        this.Category = Category;
     }
 
     /**
@@ -186,6 +204,30 @@ public class Products {
     public void setProductColor(List<ProductColor> productColor) {
         this.productColor = productColor;
     }
-    
+
+    public int getStock() {
+        return Stock;
+    }
+
+    /**
+     * @param Stock the Stock to set
+     */
+    public void setStock(int Stock) {
+        this.Stock = Stock;
+    }
+
+    /**
+     * @return the CategoryID
+     */
+    public Integer getCategoryID() {
+        return CategoryID;
+    }
+
+    /**
+     * @param CategoryID the CategoryID to set
+     */
+    public void setCategoryID(Integer CategoryID) {
+        this.CategoryID = CategoryID;
+    }
     
 }

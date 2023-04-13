@@ -7,10 +7,6 @@ package Model;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
-/**
- *
- * @author couni
- */
 public class Model_Menu {
 
     public String getIcon() {

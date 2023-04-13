@@ -32,7 +32,7 @@ public class ListForm extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         buttonEdit1 = new swing.Button.ButtonEdit();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table1 = new swing.Table.Table();
+        table1 = new swing.TableBuild.Table();
 
         jTextField1.setText("jTextField1");
 
@@ -46,6 +46,19 @@ public class ListForm extends javax.swing.JPanel {
 
         table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
@@ -106,6 +119,6 @@ public class ListForm extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private swing.Table.Table table1;
+    private swing.TableBuild.Table table1;
     // End of variables declaration//GEN-END:variables
 }

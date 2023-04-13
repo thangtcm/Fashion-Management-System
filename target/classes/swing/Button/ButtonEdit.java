@@ -27,40 +27,7 @@ public final class ButtonEdit extends JButton {
         this.over = over;
     }
 
-    public Color getColor() {
-        return color;
-    }
 
-    public void setColor(Color color) {
-        this.color = color;
-        setBackground(color);
-    }
-    
-    public void setForegroundHover(Color color)
-    {
-        this.colorForeground = color;
-    }
-    
-    public Color getForegroundHover()
-    {
-        return colorForeground;
-    }
-
-    public Color getColorOver() {
-        return colorOver;
-    }
-
-    public void setColorOver(Color colorOver) {
-        this.colorOver = colorOver;
-    }
-
-    public Color getColorClick() {
-        return colorClick;
-    }
-
-    public void setColorClick(Color colorClick) {
-        this.colorClick = colorClick;
-    }
 
     public Color getBorderColor() {
         return borderColor;
@@ -81,40 +48,46 @@ public final class ButtonEdit extends JButton {
     public ButtonEdit() {
         //  Init Color
         this.sizeBorder = 2;
-        setColor(Color.WHITE);
-        colorOver = new Color(179, 250, 160);
-        colorClick = new Color(152, 184, 144);
+        BackgroundColor = new Color(179, 250, 160);
         borderColor = new Color(30, 136, 56);
+        BackgroundHover = Color.WHITE;
+        Color = Color.WHITE;
+        ColorHover = new Color(179, 250, 160);
+        setBackground(BackgroundColor);
+        setForeground(Color);
         setContentAreaFilled(false);
         //  Add event mouse
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent me) {
-                setBackground(colorOver);
-                setForeground(colorForeground);
+                setBackground(BackgroundHover);
+                setForeground(ColorHover);
                 setCursor(new Cursor(Cursor.HAND_CURSOR));
                 over = true;
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
-                setBackground(color);
-                setForeground(colorOver);
+                setBackground(BackgroundColor);
+                setForeground(Color);
                 over = false;
 
             }
 
             @Override
             public void mousePressed(MouseEvent me) {
-                setBackground(colorClick);
+                setBackground(BackgroundColor);
+                setForeground(Color);
             }
 
             @Override
             public void mouseReleased(MouseEvent me) {
                 if (over) {
-                    setBackground(colorOver);
+                    setBackground(BackgroundHover);
+                    setForeground(ColorHover);
                 } else {
-                    setBackground(color);
+                    setBackground(BackgroundColor);
+                    setForeground(Color);
                 }
             }
         });
@@ -124,12 +97,12 @@ public final class ButtonEdit extends JButton {
     
     
     private boolean over;
-    private Color color;
-    private Color colorOver;
-    private Color colorClick;
+    private Color BackgroundHover;
+    private Color ColorHover;
+    private Color Color;
+    private Color BackgroundColor;
     private Color borderColor;
     private int radius = 0;
-    private Color colorForeground = Color.BLACK;
     private int sizeBorder;
 
     @Override
@@ -157,5 +130,61 @@ public final class ButtonEdit extends JButton {
      */
     public void setSizeBorder(int sizeBorder) {
         this.sizeBorder = sizeBorder;
+    }
+
+    /**
+     * @return the BackgroundHover
+     */
+    public Color getBackgroundHover() {
+        return BackgroundHover;
+    }
+
+    /**
+     * @param BackgroundHover the BackgroundHover to set
+     */
+    public void setBackgroundHover(Color BackgroundHover) {
+        this.BackgroundHover = BackgroundHover;
+    }
+
+    /**
+     * @return the ColorHover
+     */
+    public Color getColorHover() {
+        return ColorHover;
+    }
+
+    /**
+     * @param ColorHover the ColorHover to set
+     */
+    public void setColorHover(Color ColorHover) {
+        this.ColorHover = ColorHover;
+    }
+
+    /**
+     * @return the Color
+     */
+    public Color getColor() {
+        return Color;
+    }
+
+    /**
+     * @param Color the Color to set
+     */
+    public void setColor(Color Color) {
+        this.Color = Color;
+    }
+
+    /**
+     * @return the Background
+     */
+    public Color getBackgroundColor() {
+        return BackgroundColor;
+    }
+
+    /**
+     * @param Background the Background to set
+     */
+    public void setBackgroundColor(Color Background) {
+        this.BackgroundColor = Background;
     }
 }

@@ -10,5 +10,7 @@ package Enum;
  */
 public enum TypeNotification {
     Error,
-    Susscess
+    Success,
+    Warning,
+    Default
 }

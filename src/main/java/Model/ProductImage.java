@@ -4,6 +4,9 @@
  */
 package Model;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author couni
@@ -13,6 +16,7 @@ public class ProductImage {
     private Products ProductID;
     private String ImageUrl;
 
+    private Icon icon;
     /**
      * @return the ID
      */
@@ -53,6 +57,13 @@ public class ProductImage {
      */
     public void setImageUrl(String ImageUrl) {
         this.ImageUrl = ImageUrl;
+    }
+
+    /**
+     * @return the icon
+     */
+    public Icon getIcon() {
+        return new ImageIcon(getClass().getResource(this.ImageUrl));
     }
     
     

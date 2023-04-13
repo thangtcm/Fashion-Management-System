@@ -19,19 +19,6 @@ public class Order {
     private int NumberPhone;
     private String Status;
 
-    public Order()
-    {}
-
-    public Order(Order order)
-    {
-        this.ID = order.ID;
-        this.user = order.user;
-        this.OrderDate = order.OrderDate;
-        this.ShippedDate = order.ShipedDate;
-        this.Address = order.Address;
-        this.NumberPhone = order.NumberPhone;
-        this.Status = order.Status;
-    }
     /**
      * @param Id
      * @param user

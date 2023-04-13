@@ -10,10 +10,6 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author couni
- */
 public class DBConnect {
     static String url = "jdbc:sqlserver://localhost:54499;instance=SQLEXPRESS;databaseName=Fashtion;encrypt=true;trustServerCertificate=true";
     static String username = "sa";

@@ -9,6 +9,7 @@ package Enum;
  * @author couni
  */
 public enum TypeRoleName {
+    None,
     Admin,
     Manager,
     Staff,

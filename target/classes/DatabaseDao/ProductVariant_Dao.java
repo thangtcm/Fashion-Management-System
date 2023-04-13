@@ -5,7 +5,7 @@
 package DatabaseDao;
 
 import Model.ProductVariants;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface ProductVariant_Dao {
     // Get toàn bộ thông tin sản phẩm thuộc về Sản Phẩm (ID)
-    public List<ProductVariants> getProductVariantList(int ID);
+    public ArrayList<ProductVariants> getProductVariantList(int ID);
     
     public boolean AddProductVariant(ProductVariants productVariant);
     

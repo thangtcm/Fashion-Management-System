@@ -7,7 +7,7 @@ package DatabaseDaoImpl;
 import DatabaseDao.Category_Dao;
 import Enum.TypeNotification;
 import Model.Categories;
-import Sevices.Notification;
+import static Services.Notification.showMessage;
 import dao.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -27,7 +26,6 @@ public class Category_DaoImpl implements Category_Dao{
     PreparedStatement prepStatement= null;
     //Statement statement = null;
     ResultSet resultSet = null;
-    Notification notification = new Notification();
     
     public Category_DaoImpl()
     {
@@ -43,13 +41,14 @@ public class Category_DaoImpl implements Category_Dao{
             addFunction(category, query);
             int rowsInserted = prepStatement.executeUpdate();
             if (rowsInserted > 0) {
-                notification.showMessage("New Category has been added.", TypeNotification.Susscess.toString());
+                showMessage("New Category has been added.", TypeNotification.Success);
                 return true;
             }
             
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage()); 
+            System.out.println(e.getMessage());
+            showMessage("Đã có lỗi xảy ra", TypeNotification.Error);
         }finally {
             try {
                 if (prepStatement != null) {
@@ -68,15 +67,14 @@ public class Category_DaoImpl implements Category_Dao{
             int i = 1;
             prepStatement.setString(i++, category.getCategoriesName().trim());
             prepStatement.setString(i++, category.getDescription().trim());
-            prepStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
     @Override
-    public List<Categories> getCategoryList() {
-        List<Categories> list = new ArrayList<>();
+    public ArrayList<Categories> getCategoryList() {
+        ArrayList<Categories> list = new ArrayList<>();
         //Lấy Toàn bộ Products và Categories và Supplyer có liên quan
         String sql = "SELECT * FROM [Categories]";
         try{
@@ -115,9 +113,9 @@ public class Category_DaoImpl implements Category_Dao{
             prepStatement = conn.prepareStatement(query);
             prepStatement.setInt(1, category.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Delete User Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Delete User Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {
@@ -172,9 +170,9 @@ public class Category_DaoImpl implements Category_Dao{
             prepStatement.setString(i++, category.getDescription().trim());
             prepStatement.setInt(i, category.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Updated Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {

@@ -5,14 +5,14 @@
 package DatabaseDao;
 
 import Model.ProductImage;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author couni
  */
 public interface ProductImage_Dao {
-    public List<ProductImage> getProductImageList(int ID); // ID Product Variant
+    public ArrayList<ProductImage> getProductImageList(int ID); // ID Product Variant
     
     public boolean AddProductImage(ProductImage productImage);
     

@@ -4,6 +4,7 @@
  */
 package dialog;
 
+import Enum.TypeNotification;
 import java.awt.Color;
 import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
 import jiconfont.swing.IconFontSwing;
@@ -61,16 +62,14 @@ public class NotificationMessage extends javax.swing.JDialog {
         animator.setResolution(0);
         animator.setAcceleration(0.5f);
     }
-    public void showMessage(String message, String TypeNotification) {
+    public void showMessage(String message, TypeNotification type) {
         lbMessage.setText(message);
         IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
-        if(null == TypeNotification)
-        {
-            lbIcon.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.SPEAKER_NOTES, 60, new Color(254, 86, 96)));
-        }
-        else switch (TypeNotification) {
-            case "Error" -> lbIcon.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.REPORT_PROBLEM, 60, new Color(254, 86, 96)));
-            case "Susscess" -> lbIcon.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.CHECK_CIRCLE, 60, new Color(254, 86, 96)));
+
+        switch (type) {
+            case Error -> lbIcon.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.REPORT_PROBLEM, 60, new Color(254, 86, 96)));
+            case Success -> lbIcon.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.CHECK_CIRCLE, 60, new Color(254, 86, 96)));
+            case Warning -> lbIcon.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.WARNING, 60, new Color(244,4,4)));
             default -> lbIcon.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.SPEAKER_NOTES, 60, new Color(254, 86, 96)));
         }
         animator.start();

@@ -5,18 +5,18 @@
 package DatabaseDao;
 
 import Model.Products;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author couni
  */
 public interface Product_Dao {
-    public List<Products> getProductList();
+    public ArrayList<Products> getProductList(Products products);
     
-    public boolean AddProduct(Products product);
+    public int AddProduct(Products product);
     
-    public void Delete_Product(Products product);
+    public void Delete_Product(int ID);
     
     public Products getProducts(int ID);
     

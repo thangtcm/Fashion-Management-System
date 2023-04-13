@@ -60,7 +60,7 @@ public class TextField extends JTextField {
     private boolean mouseOver = false;
     private String labelText = "Label";
     private String helperText = "";
-    private final int spaceHelperText = 20;
+    private int spaceHelperText = 15;
     private Color lineColor = new Color(3, 155, 216);
 
     public TextField() {
@@ -147,7 +147,7 @@ public class TextField extends JTextField {
         FontMetrics ft = g2.getFontMetrics();
         Rectangle2D r2 = ft.getStringBounds(labelText, g2);
         double height = getHeight() - in.top - in.bottom;
-        double textY = (height - r2.getHeight()) / 2;
+        double textY = (height - r2.getHeight() - (spaceHelperText-10)) / 2;
         double size;
         if (animateHinText) {
             if (show) {
@@ -197,5 +197,19 @@ public class TextField extends JTextField {
             showing(string.equals(""));
         }
         super.setText(string);
+    }
+
+    /**
+     * @return the spaceHelperText
+     */
+    public int getSpaceHelperText() {
+        return spaceHelperText;
+    }
+
+    /**
+     * @param spaceHelperText the spaceHelperText to set
+     */
+    public void setSpaceHelperText(int spaceHelperText) {
+        this.spaceHelperText = spaceHelperText;
     }
 }

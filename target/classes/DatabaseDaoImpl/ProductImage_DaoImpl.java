@@ -8,13 +8,12 @@ import DatabaseDao.ProductImage_Dao;
 import DatabaseDao.Product_Dao;
 import Enum.TypeNotification;
 import Model.ProductImage;
-import Sevices.Notification;
+import static Services.Notification.showMessage;
 import dao.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,23 +24,16 @@ import java.util.List;
 public class ProductImage_DaoImpl implements ProductImage_Dao{
     Connection conn = null;
     PreparedStatement prepStatement= null;
-    Statement statement = null;
     ResultSet resultSet = null;
     
-    Notification notification= new Notification();
     public ProductImage_DaoImpl()
     {
-        try {
-            conn = new DBConnect().getConnection();
-            statement = conn.createStatement();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+        conn = new DBConnect().getConnection();
     }
 
     @Override
-    public List<ProductImage> getProductImageList(int ID) {
-        List<ProductImage> list = new ArrayList<>();
+    public ArrayList<ProductImage> getProductImageList(int ID) {
+        ArrayList<ProductImage> list = new ArrayList<>();
         //Lấy Toàn bộ Products và Categories và Supplyer có liên quan
         
         try{
@@ -85,17 +77,11 @@ public class ProductImage_DaoImpl implements ProductImage_Dao{
             String query = "INSERT INTO [ProductImage] (ProductID, ImageUrl) VALUES (?,?)";
             addFunction(productImage, query);
             int rowsInserted = prepStatement.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("New ProductImage has been added.");
-                //notification.showMessage("New ProductImage has been added.", TypeNotification.Susscess.toString());
-                return true;
-            }else {
-                notification.showMessage("Failed to add new ProductImage.", TypeNotification.Error.toString());
-            }
-            
+            return (rowsInserted > 0) ;
+
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage()); 
+            System.out.println("Lỗi add Img "  + e.getMessage());
         }finally {
             try {
                 if (prepStatement != null) {
@@ -115,11 +101,10 @@ public class ProductImage_DaoImpl implements ProductImage_Dao{
         try {
             prepStatement = conn.prepareStatement(query);
             int i = 1;
-            //prepStatement.setInt(i++, productImage.getProduct().getID());
+            prepStatement.setInt(i++, productImage.getProduct().getID());
             prepStatement.setString(i++, productImage.getImageUrl().trim());
-            prepStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi add Img "  + e.getMessage());
         }
     }
 
@@ -130,9 +115,9 @@ public class ProductImage_DaoImpl implements ProductImage_Dao{
             prepStatement = (PreparedStatement) conn.prepareStatement(query);
             prepStatement.setInt(1, productImage.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Delete Product Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Delete Product Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {

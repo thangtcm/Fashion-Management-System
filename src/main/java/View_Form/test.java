@@ -4,9 +4,13 @@
  */
 package View_Form;
 
+import Components.ImageField;
 import com.raven.chart.ModelChartLine;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,6 +40,7 @@ public class test extends javax.swing.JFrame {
      * Creates new form test
      * @throws java.security.NoSuchAlgorithmException
      */
+    
     public test() throws NoSuchAlgorithmException {
         initComponents();
         initData();
@@ -82,9 +87,14 @@ public class test extends javax.swing.JFrame {
 
         badge1 = new swing.Badge.Badge();
         badge2 = new swing.Badge.Badge();
-        buttonEdit1 = new swing.Button.ButtonEdit();
-        jLabel1 = new javax.swing.JLabel();
         buttonEdit2 = new swing.Button.ButtonEdit();
+        imageAvatar1 = new swing.Image.ImageAvatar();
+        textFieldRadius1 = new swing.Field.TextFieldRadius();
+        imageLinear1 = new swing.Image.ImageLinear();
+        JPanelTest = new javax.swing.JPanel();
+        imageField1 = new Components.ImageField();
+        buttonEdit1 = new swing.Button.ButtonEdit();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -92,22 +102,9 @@ public class test extends javax.swing.JFrame {
 
         badge2.setText("badge2");
 
-        buttonEdit1.setBackground(new java.awt.Color(231, 231, 231));
-        buttonEdit1.setText("UploadFile");
-        buttonEdit1.setBorderColor(new java.awt.Color(51, 51, 255));
-        buttonEdit1.setColorOver(new java.awt.Color(0, 255, 255));
-        buttonEdit1.setRadius(30);
-        buttonEdit1.setSizeBorder(1);
-        buttonEdit1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonEdit1ActionPerformed(evt);
-            }
-        });
-
         buttonEdit2.setBackground(new java.awt.Color(231, 231, 231));
         buttonEdit2.setText("Save");
         buttonEdit2.setBorderColor(new java.awt.Color(51, 51, 255));
-        buttonEdit2.setColorOver(new java.awt.Color(0, 255, 255));
         buttonEdit2.setRadius(30);
         buttonEdit2.setSizeBorder(1);
         buttonEdit2.addActionListener(new java.awt.event.ActionListener() {
@@ -116,119 +113,200 @@ public class test extends javax.swing.JFrame {
             }
         });
 
+        imageAvatar1.setImage(new javax.swing.ImageIcon(getClass().getResource("/Images/Avatar/avatar.jpg"))); // NOI18N
+
+        textFieldRadius1.setText("");
+        textFieldRadius1.setLabelText("Nhập");
+        textFieldRadius1.setShadowColor(new java.awt.Color(0, 204, 255));
+
+        imageLinear1.setImage(new javax.swing.ImageIcon(getClass().getResource("/Images/Avatar/avatarpatient.jpg"))); // NOI18N
+
+        JPanelTest.setBackground(new java.awt.Color(255, 255, 255));
+        JPanelTest.add(imageField1);
+
+        buttonEdit1.setBackground(new java.awt.Color(231, 231, 231));
+        buttonEdit1.setText("UploadFile");
+        buttonEdit1.setBorderColor(new java.awt.Color(51, 51, 255));
+        buttonEdit1.setRadius(30);
+        buttonEdit1.setSizeBorder(1);
+        buttonEdit1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEdit1ActionPerformed(evt);
+            }
+        });
+        JPanelTest.add(buttonEdit1);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(badge2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(imageLinear1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(326, 326, 326)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(badge1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(209, 209, 209)
+                                .addComponent(textFieldRadius1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 248, Short.MAX_VALUE)
+                                .addComponent(buttonEdit2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(418, 418, 418))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(badge2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(97, 97, 97)
-                        .addComponent(badge1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(271, 271, 271)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(buttonEdit2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(buttonEdit1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(395, 395, 395)
+                                .addComponent(jButton1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(JPanelTest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(629, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(110, 110, 110)
+                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(badge2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(badge1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(86, 86, 86)
-                .addComponent(buttonEdit1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(157, 157, 157)
-                .addComponent(buttonEdit2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(badge1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(badge2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(imageAvatar1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(buttonEdit2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(textFieldRadius1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(imageLinear1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                        .addComponent(JPanelTest, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(133, 133, 133))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(jButton1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private String NameFile = null;
-    private byte[] dataFile = null;
-    File selectedFile = null;
+    private ArrayList<ImageField> labellist = new ArrayList<ImageField>();
     private void buttonEdit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEdit1ActionPerformed
         // TODO add your handling code here:
-         JFileChooser file = new JFileChooser();
-         file.setCurrentDirectory(new File(System.getProperty("user.dir")));
-          
-          //filter the files
-          FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg","png");
-          file.addChoosableFileFilter(filter);
-          int result = file.showSaveDialog(null);
-           //if the user click on save in Jfilechooser
-          if(result == JFileChooser.APPROVE_OPTION){
-             selectedFile = file.getSelectedFile();
-             try {
-                dataFile = Files.readAllBytes(selectedFile.toPath());
-                NameFile = selectedFile.getName();
-                String filename = selectedFile.getAbsolutePath();
-                jLabel1.setIcon(ResizeImage(filename, jLabel1));
-             } catch (IOException ex) {
-                 Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
-             }
-          }
-           //if the user click on save in Jfilechooser
+        JFileChooser file = new JFileChooser();
+        file.setCurrentDirectory(new File(System.getProperty("user.dir")));
+
+         //filter the files
+         FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images", "jpg","png");
+         file.addChoosableFileFilter(filter);
+         file.setAcceptAllFileFilterUsed(false);
+         int result = file.showSaveDialog(null);
+         
+          //if the user click on save in Jfilechooser
+         if(result == JFileChooser.APPROVE_OPTION){
+            ImageField label = new ImageField();
+            File selectedFile = file.getSelectedFile();
+            //dataFile = Files.readAllBytes(selectedFile.toPath());
+            label.setNameFile(selectedFile.getName());
+            String filename = selectedFile.getAbsolutePath();
+            
+            label.setSelectedFile(selectedFile);
+            label.setSize(92, 115);
+            System.out.println("View_Form.test.buttonEdit1ActionPerformed() " + label.getWidthImage());
+            label.setImage(new ImageIcon(filename));
+            JPanelTest.add(label, 0);
+            JPanelTest.revalidate();
+            JPanelTest.repaint();
+            label.getButton().addActionListener((ActionEvent e) -> {
+                JPanelTest.remove(label);
+                JPanelTest.revalidate();
+                JPanelTest.repaint();
+                labellist.remove(label);
+            });
+            labellist.add(label);
+           // jLabel1.setIcon(ResizeImage(filename, jLabel1));
+         }
+          //if the user click on save in Jfilechooser
 
 
-          else if(result == JFileChooser.CANCEL_OPTION){
-              System.out.println("No File Select");
-          }
+         else if(result == JFileChooser.CANCEL_OPTION){
+             System.out.println("No File Select");
+         }
     }//GEN-LAST:event_buttonEdit1ActionPerformed
 
     private void buttonEdit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEdit2ActionPerformed
-        // TODO add your handling code here:
         String absolutePath = System.getProperty("user.dir");
-        String extension = FilenameUtils.getExtension(NameFile); 
-        String newName = FilenameUtils.getBaseName(NameFile) + "_" + System.currentTimeMillis() + "." + extension; // tạo tên file mới
-        String PathFile = "\\Images\\Upload\\"+ newName;
-        String Path = absolutePath + "\\src\\main\\java" + PathFile;
-        
-        System.out.println("\n\t FileName : " + NameFile);
-        try {
-            FileInputStream fis = new FileInputStream(selectedFile);
-            byte[] data = new byte[(int) selectedFile.length()];
-            fis.read(data);
-            fis.close();
-            saveFile(data, Path);
-            System.out.println("File uploaded successfully");
-            String fullPath = new File(Path).getAbsolutePath();
-            System.out.println("File saved to: " + fullPath);
-            System.out.println("File saved to: " + PathFile);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
+        String extension, newName, PathFile, Path;
+        for(ImageField obj : labellist)
+        {
+            extension = FilenameUtils.getExtension(obj.getNameFile());
+            newName = FilenameUtils.getBaseName(obj.getNameFile()) + "_" + System.currentTimeMillis() + "." + extension; // tạo tên file mới
+            PathFile = "/Images/Products/"+ newName;
+            Path = absolutePath + "/src/main/java" + PathFile;
+            try {
+                byte[] data;
+                try (FileInputStream fis = new FileInputStream(obj.getSelectedFile())) {
+                    data = new byte[(int) obj.getSelectedFile().length()];
+                    fis.read(data);
+                }
+                saveFile(data, Path);
+                System.out.println("File uploaded successfully (FileName : " + newName + " )");
+                String fullPath = new File(Path).getAbsolutePath();
+                System.out.println("File saved to: " + fullPath);
+                System.out.println("File saved to: " + PathFile);
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
+
+        
         
     }//GEN-LAST:event_buttonEdit2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int ID = 0;
+        for(ImageField obj : labellist)
+        {
+            System.out.println("ID " + ID++);
+            System.out.println("Name " + obj.getNameFile());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     public void saveFile(byte[] data, String filename) throws IOException {
-        File dir = new File("\\src\\main\\java\\Images\\Upload\\"); // tạo đối tượng File cho thư mục lưu trữ
+        File dir = new File("/src/main/java/Images/Products/"); // tạo đối tượng File cho thư mục lưu trữ
         if (!dir.exists()) { // nếu thư mục không tồn tại, tạo mới
             dir.mkdirs();
         }
-        FileOutputStream out = new FileOutputStream(filename);
-        out.write(data);
-        out.close();
+        try (FileOutputStream out = new FileOutputStream(filename)) {
+            out.write(data);
+        }
     }
     
-    public ImageIcon ResizeImage(String ImagePath, JLabel label)
+    public ImageIcon ResizeImage(String ImagePath, int width, int height)
     {
         ImageIcon MyImage = new ImageIcon(ImagePath);
         Image img = MyImage.getImage();
-        Image newImg = img.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        Image newImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(newImg);
         return image;
     }
@@ -270,10 +348,15 @@ public class test extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel JPanelTest;
     private swing.Badge.Badge badge1;
     private swing.Badge.Badge badge2;
     private swing.Button.ButtonEdit buttonEdit1;
     private swing.Button.ButtonEdit buttonEdit2;
-    private javax.swing.JLabel jLabel1;
+    private swing.Image.ImageAvatar imageAvatar1;
+    private Components.ImageField imageField1;
+    private swing.Image.ImageLinear imageLinear1;
+    private javax.swing.JButton jButton1;
+    private swing.Field.TextFieldRadius textFieldRadius1;
     // End of variables declaration//GEN-END:variables
 }

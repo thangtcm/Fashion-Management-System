@@ -5,7 +5,7 @@
 package DatabaseDao;
 
 import Model.User;
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,11 +16,13 @@ public interface User_Dao {
     
     public boolean AddUser(User user);
     
-    public void Delete_User(User user);
+    public void Delete_User(int Id);
     
-    public boolean Update_User(User user);
+    public void Update_User(User user);
     
     public User LoginUser(User user);
+    
+    public User getUser(int Id);
     
     public void ChangePassword(User user, String Password);
 }

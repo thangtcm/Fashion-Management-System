@@ -4,9 +4,10 @@
  */
 package Components;
 
-import java.awt.Color;
-import jiconfont.icons.google_material_design_icons.GoogleMaterialDesignIcons;
-import jiconfont.swing.IconFontSwing;
+import Model.User;
+import java.awt.Component;
+import javax.swing.Icon;
+import javax.swing.JLayeredPane;
 
 /**
  *
@@ -17,15 +18,24 @@ public class HeaderBody extends javax.swing.JPanel {
     /**
      * Creates new form HeaderBody
      */
+    private Component back; 
+    private User user;
+    private JLayeredPane body;
     public HeaderBody() {
         initComponents();
-        init();
     }
     
-    private void init()
+    public void init(Icon Back, User user, String TextTitle, Component back, JLayeredPane body)
     {
-        IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
-        IconBack.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.ARROW_BACK, 30, new Color(23,34,56)));
+        //IconFontSwing.register(GoogleMaterialDesignIcons.getIconFont());
+        //IconBack.setIcon(IconFontSwing.buildIcon(GoogleMaterialDesignIcons.ARROW_BACK, 30, new Color(23,34,56)));
+        IconBack.setIcon(Back);
+        imgAvatar.setImage(user.getIcon());
+        txtName.setText("<html>" + user.getFullName() + "</html>");
+        txtRoleName.setText(user.getRoleName());
+        txtTitle.setText(TextTitle);
+        setBack(back);
+        setBody(body);
     }
 
     /**
@@ -60,6 +70,7 @@ public class HeaderBody extends javax.swing.JPanel {
 
         txtName.setFont(new java.awt.Font("Inter", 1, 16)); // NOI18N
         txtName.setForeground(new java.awt.Color(23, 34, 56));
+        txtName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         txtName.setText("Trần Cao Minh Thắng");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -67,34 +78,41 @@ public class HeaderBody extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtRoleName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(122, 122, 122)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtRoleName, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(imgAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(13, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(imgAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtRoleName)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtRoleName))
+                    .addComponent(imgAvatar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setOpaque(false);
 
-        txtTitle.setFont(new java.awt.Font("Inter", 1, 24)); // NOI18N
+        txtTitle.setFont(new java.awt.Font("Inter", 1, 26)); // NOI18N
         txtTitle.setForeground(new java.awt.Color(23, 34, 56));
         txtTitle.setText("Profile Customer");
 
         IconBack.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         IconBack.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icon/menu.png"))); // NOI18N
+        IconBack.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        IconBack.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                IconBackMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -104,7 +122,7 @@ public class HeaderBody extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(IconBack, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -122,9 +140,8 @@ public class HeaderBody extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 299, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -135,7 +152,19 @@ public class HeaderBody extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void IconBackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_IconBackMouseClicked
+        if(this.back != null)
+            showForm(this.back);
+    }//GEN-LAST:event_IconBackMouseClicked
 
+    private void showForm(Component com) {
+            body.removeAll();
+            body.add(com);
+            body.repaint();
+            body.revalidate();
+        }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel IconBack;
     private swing.Image.ImageAvatar imgAvatar;
@@ -145,4 +174,32 @@ public class HeaderBody extends javax.swing.JPanel {
     private javax.swing.JLabel txtRoleName;
     private javax.swing.JLabel txtTitle;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the back
+     */
+    public Component getBack() {
+        return back;
+    }
+
+    /**
+     * @param back the back to set
+     */
+    public void setBack(Component back) {
+        this.back = back;
+    }
+
+    /**
+     * @return the body
+     */
+    public JLayeredPane getBody() {
+        return body;
+    }
+
+    /**
+     * @param body the body to set
+     */
+    public void setBody(JLayeredPane body) {
+        this.body = body;
+    }
 }

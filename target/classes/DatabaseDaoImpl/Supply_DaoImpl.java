@@ -7,7 +7,8 @@ package DatabaseDaoImpl;
 import DatabaseDao.Supply_Dao;
 import Enum.TypeNotification;
 import Model.Suppliers;
-import Sevices.Notification;
+import Services.Notification;
+import static Services.Notification.showMessage;
 import dao.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,7 +28,6 @@ public class Supply_DaoImpl implements Supply_Dao{
     PreparedStatement prepStatement= null;
     Statement statement = null;
     ResultSet resultSet = null;
-    Notification notification = new Notification();
     
     public Supply_DaoImpl()
     {
@@ -90,10 +90,10 @@ public class Supply_DaoImpl implements Supply_Dao{
             addFunction(supply, query);
             int rowsInserted = prepStatement.executeUpdate();
             if (rowsInserted > 0) {
-                notification.showMessage("New Supply has been added.", TypeNotification.Susscess.toString());
+                showMessage("New Supply has been added.", TypeNotification.Success);
                 return true;
             }else {
-                notification.showMessage("Failed to add new Supply.", TypeNotification.Error.toString());
+                showMessage("Failed to add new Supply.", TypeNotification.Error);
             }
             
         }
@@ -131,9 +131,9 @@ public class Supply_DaoImpl implements Supply_Dao{
             prepStatement = (PreparedStatement) conn.prepareStatement(query);
             prepStatement.setInt(1, supply.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Delete User Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Delete User Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Error);
             System.out.println(throwables.getMessage());
         }finally {
             try {
@@ -187,9 +187,9 @@ public class Supply_DaoImpl implements Supply_Dao{
             prepStatement.setString(i++, supply.getPhone().trim());
             prepStatement.setInt(i, supply.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Updated Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {

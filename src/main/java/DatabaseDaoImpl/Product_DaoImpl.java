@@ -4,13 +4,11 @@
  */
 package DatabaseDaoImpl;
 
-import DatabaseDao.Category_Dao;
-import DatabaseDao.ProductImage_Dao;
 import DatabaseDao.Product_Dao;
-import DatabaseDao.Supply_Dao;
 import Enum.TypeNotification;
 import Model.Products;
-import Sevices.Notification;
+import static Services.Notification.showMessage;
+import Services.StringHandle;
 import dao.DBConnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -27,39 +24,29 @@ import java.util.List;
 public class Product_DaoImpl implements Product_Dao{
     Connection conn = null;
     PreparedStatement prepStatement= null;
-    Statement statement = null;
     ResultSet resultSet = null;
-    
-    Notification notification= new Notification();
+
     public Product_DaoImpl()
     {
-        try {
-            conn = new DBConnect().getConnection();
-            statement = conn.createStatement();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
+        conn = new DBConnect().getConnection();
     }
     @Override
-    public boolean AddProduct(Products product)
+    public int AddProduct(Products product)
     {
         try
         {
-            String query = "INSERT INTO [Products] (ProductName, SupplerID, CategoryID, Description, Status, Sale) VALUES (?,?,?,?,?,?)";
-
+            String query = "INSERT INTO [Products] (ProductName, CategoryID, Description, Status, Sale) VALUES (?,?,?,?,?)";
             addFunction(product, query);
             int rowsInserted = prepStatement.executeUpdate();
             if (rowsInserted > 0) {
-                notification.showMessage("New Product has been added.", TypeNotification.Susscess.toString());
-                return true;
+                //showMessage("New Product has been added.", TypeNotification.Success);
+                resultSet = prepStatement.getGeneratedKeys();
+                if(resultSet.next())
+                    return resultSet.getInt(1);
             }
-            else {
-                notification.showMessage("Failed to add new Product.", TypeNotification.Error.toString());
-            }
-            
         }
         catch(SQLException e) {
-            System.out.println(e.getMessage()); 
+            System.out.println("Lỗi ở đây " + e.getMessage()); 
         }finally {
             try {
                 if (prepStatement != null) {
@@ -72,54 +59,65 @@ public class Product_DaoImpl implements Product_Dao{
                 System.out.println(e.getMessage());
             }
         }
-        return false;
+        return -1;
     }
     
     public void addFunction(Products product, String query) {
         try {
-            prepStatement = conn.prepareStatement(query);
+            prepStatement = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             int i = 1;
             prepStatement.setString(i++, product.getProductName().trim());
-            prepStatement.setInt(i++, product.getSupplerID().getID());
-            prepStatement.setInt(i++, product.getCategoryID().getID());
+//            prepStatement.setInt(i++, product.getSupplerID().getID());
+            prepStatement.setInt(i++, product.getCategoryID());
             prepStatement.setString(i++, product.getDescription().trim());
             prepStatement.setBoolean(i++, product.getStatus());
             prepStatement.setDouble(i++, product.getSale());
-            prepStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi ở đây " + e.getMessage());
         }
     }
     
 
     @Override
-    public List<Products> getProductList() {
-        List<Products> list = new ArrayList<>();
+    public ArrayList<Products> getProductList(Products products) {
+        ArrayList<Products> list = new ArrayList<>();
         //Lấy Toàn bộ Products và Categories và Supplyer có liên quan
-        String sql = """
-                     SELECT p.*, c.*, s.* 
-                     FROM [Products] p LEFT JOIN Categories c ON p.CategoryID = c.ID 
-                     LEFT JOIN Suppliers s ON p.SupplyerID = s.ID""";
+        StringBuilder sql = new StringBuilder("SELECT * FROM Products");
+        if(products != null)
+        {
+            if(products.getProductName()!= null)
+            {
+                sql.append(" AND ProductName LIKE N'").append(StringHandle.addWildcards(products.getProductName())).append("'");
+            }
+            if(products.getCategoryID() != null)
+            {
+                sql.append(" AND CategoryID = '").append(products.getCategoryID()).append("'");
+            }
+        }
+        String query = "SELECT SUM(pv.Stock) FROM Products p "
+                + "LEFT JOIN ProductVariants pv ON pv.ProductID = p.ID "
+                + "WHERE p.ID = ?";
         try{
-            prepStatement = conn.prepareStatement(sql);  
+            PreparedStatement preStatementStock = conn.prepareStatement(query);
+            
+            ResultSet resultSetStock;
+            int ProductsStock = 0;
+            
+            prepStatement = conn.prepareStatement(sql.toString().replaceFirst("AND", "WHERE"));  
             resultSet = prepStatement.executeQuery();
             while (resultSet.next())
             {
                     Products table_product = new Products();
-                    table_product.setID(resultSet.getInt("p.ID"));
+                    table_product.setID(resultSet.getInt("ID"));
                     table_product.setProductName(resultSet.getString("ProductName"));
                     
-                    //Get all information Category của product
-                    Category_Dao category = new Category_DaoImpl();
-                    table_product.setCategoryID(category.getCategory(resultSet.getInt("c.ID")));
-                    
-                    //Get all information Supply của Product
-                    Supply_Dao supply =new Supply_DaoImpl();
-                    table_product.setSupplerID(supply.getSupply(resultSet.getInt("s.ID")));
-                    
-                    ProductImage_Dao productImage = new ProductImage_DaoImpl();
-                    table_product.setProductImages(productImage.getProductImageList(resultSet.getInt("p.ID")));
-                    
+                    table_product.setCategoryID(resultSet.getInt("CategoryID"));
+                   
+                    preStatementStock.setInt(1, resultSet.getInt("ID"));
+                    resultSetStock = preStatementStock.executeQuery();
+                    if(resultSetStock.next())
+                        ProductsStock = resultSetStock.getInt(1);
+                    table_product.setStock(ProductsStock);
                     table_product.setDescription(resultSet.getString("Description"));
                     table_product.setStatus(resultSet.getBoolean("Status"));
                     table_product.setSale(resultSet.getDouble("Sale"));
@@ -158,13 +156,7 @@ public class Product_DaoImpl implements Product_Dao{
                 product.setID(resultSet.getInt("ID"));
                 product.setProductName(resultSet.getString("ProductName"));
                 
-                //Get all information Category của product
-                Category_Dao category = new Category_DaoImpl();
-                product.setCategoryID(category.getCategory(resultSet.getInt("CategoryID")));
-
-                //Get all information Supply của Product
-                Supply_Dao supply =new Supply_DaoImpl();
-                product.setSupplerID(supply.getSupply(resultSet.getInt("SupplyerID")));
+                product.setCategoryID(resultSet.getInt("CategoryID"));
                 
                 product.setDescription(resultSet.getString("Description"));
                 product.setStatus(resultSet.getBoolean("Status"));
@@ -190,15 +182,15 @@ public class Product_DaoImpl implements Product_Dao{
     }
     
     @Override
-    public void Delete_Product(Products product) {
+    public void Delete_Product(int ID) {
         try {
             String query = "DELETE FROM [Products] WHERE ID=?";
             prepStatement = (PreparedStatement) conn.prepareStatement(query);
-            prepStatement.setInt(1, product.getID());
+            prepStatement.setInt(1, ID);
             prepStatement.executeUpdate();
-            notification.showMessage("Delete Product Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Delete Product Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {
@@ -214,20 +206,19 @@ public class Product_DaoImpl implements Product_Dao{
     @Override
     public void Update_Product(Products product) {
         try {
-            String query = "UPDATE [Products] SET ProductName=?,SupplyerID=?,CategoryID=?,Description=?,Status=?,Sale=? WHERE ID=?";
+            String query = "UPDATE [Products] SET ProductName=?,CategoryID=?,Description=?,Status=?,Sale=? WHERE ID=?";
             prepStatement = conn.prepareStatement(query);
             int i= 1;
             prepStatement.setString(i++, product.getProductName().trim());
-            prepStatement.setInt(i++, product.getSupplerID().getID());
-            prepStatement.setInt(i++, product.getCategoryID().getID());
+            prepStatement.setInt(i++, product.getCategoryID());
             prepStatement.setString(i++, product.getDescription().trim());
             prepStatement.setBoolean(i++, product.getStatus());
             prepStatement.setDouble(i++, product.getSale());
             prepStatement.setInt(i++, product.getID());
             prepStatement.executeUpdate();
-            notification.showMessage("Updated Successfully.", TypeNotification.Susscess.toString());
+            showMessage("Updated Successfully.", TypeNotification.Success);
         } catch (SQLException throwables) {
-            notification.showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Susscess.toString());
+            showMessage("Đã có lỗi xảy ra, vui lòng liên hệ đội ngũ hỗ trợ để được hỗ trợ.", TypeNotification.Success);
             System.out.println(throwables.getMessage());
         }finally {
             try {
