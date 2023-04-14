@@ -28,14 +28,14 @@ public class Convert {
         }
         String[] arr = name.split(" ");
         name = "";
-        for (int i = 0; i < arr.length; i++) {
-            name += arr[i].replaceFirst(arr[i].substring(0, 1), arr[i].substring(0, 1).toUpperCase()) + " ";
+        for (String arr1 : arr) {
+            name += arr1.replaceFirst(arr1.substring(0, 1), arr1.substring(0, 1).toUpperCase()) + " ";
         }
         return name.trim();
     }
     
     public static void main(String[] args) {
         Convert con = new Convert();
-        System.out.println(con.convertName("  tUẤn   aNh"));
+        System.out.println(con.convertName(""));
     }
 }

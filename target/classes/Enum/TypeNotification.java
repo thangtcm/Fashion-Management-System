@@ -9,8 +9,8 @@ package Enum;
  * @author couni
  */
 public enum TypeNotification {
-    Error,
     Success,
     Warning,
+    Error,
     Default
 }

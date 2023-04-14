@@ -1,8 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package swing.Button;
+package Swing.Button;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
@@ -20,10 +16,6 @@ import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTarget;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-/**
- *
- * @author couni
- */
 public class Button extends JButton {
 
     public Color getEffectColor() {
@@ -39,11 +31,11 @@ public class Button extends JButton {
     private float animatSize;
     private Point pressedPoint;
     private float alpha;
-    private Color effectColor = new Color(173, 173, 173);
+    private Color effectColor = new Color(79, 98, 203);
 
     public Button() {
         setContentAreaFilled(false);
-        setBorder(new EmptyBorder(5, 5, 5, 5));
+        setBorder(new EmptyBorder(5, 0, 5, 0));
         setBackground(Color.WHITE);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
         addMouseListener(new MouseAdapter() {
@@ -69,8 +61,11 @@ public class Button extends JButton {
                 repaint();
             }
         };
-        animator = new Animator(400, target);
+        animator = new Animator(500, target);
         animator.setResolution(0);
+        animator.setAcceleration(0.5f);
+        animator.setDeceleration(0.5f);
+
     }
 
     @Override
@@ -92,4 +87,3 @@ public class Button extends JButton {
         super.paintComponent(grphcs);
     }
 }
-
