@@ -1,10 +1,10 @@
 # Fashtion Management System
 
 ![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
-![Repo Size](https://img.shields.io/github/repo-size/thangtcm/Fastion-Management-System) 
-![count](https://img.shields.io/github/languages/count/thangtcm/Fastion-Management-System) 
-![count](https://img.shields.io/github/forks/thangtcm/Fastion-Management-System) 
-![count](https://img.shields.io/github/watchers/thangtcm/Fastion-Management-System) 
+![Repo Size](https://img.shields.io/github/repo-size/thangtcm/Fashtion-Management-System) 
+![count](https://img.shields.io/github/languages/count/thangtcm/Fashtion-Management-System) 
+![count](https://img.shields.io/github/forks/thangtcm/Fashtion-Management-System) 
+![count](https://img.shields.io/github/watchers/thangtcm/Fashtion-Management-System) 
 
 ## Introduction 🎉
 Fashion Management System (FMS) is a management system designed to support businesses in the fashion industry in managing their business operations. FMS provides tools for managing production, inventory, sales, finance, and customer management.
@@ -16,6 +16,15 @@ With the increasing growth of the fashion industry and the growing competition, 
 <ul><li>Warehouse management</li><li>Sales management</li><li>Financial management</li><li>Customer management</li><li>Employee management</li></ul>
 
 <p align="middle">
+
+## Image 🏞️
+
+|![image](https://user-images.githubusercontent.com/23113822/233398876-59005bbc-e9fc-4154-9d4d-02c9d69ee941.png)|![image](https://user-images.githubusercontent.com/23113822/233398922-3a0ff56a-731c-437d-8ea5-55eb2c7aafd9.png)|
+|-----------------------|----------------------|
+|![image](https://user-images.githubusercontent.com/23113822/233398995-5651750e-2483-4965-aae8-9ea60cdffaf3.png)|![image](https://user-images.githubusercontent.com/23113822/233399079-0c9d0969-948b-401d-96fe-7d687795bf7e.png)|
+|![image](https://user-images.githubusercontent.com/23113822/233399169-ad760a28-c919-4437-b8d5-132b0ac6a913.png)|![image](https://user-images.githubusercontent.com/23113822/233399245-49a2dc91-4029-4a31-8216-259171aa8e6d.png)|
+|![image](https://user-images.githubusercontent.com/23113822/233399536-239c049a-d524-4d4a-9365-6f8ed13c04de.png)|![image](https://user-images.githubusercontent.com/23113822/233399572-7256da96-2e22-4543-9c39-3e505730f80f.png)
+
 
 
 
@@ -68,7 +77,7 @@ With the increasing growth of the fashion industry and the growing competition, 
 **Getting and Building Sources**
 
 ~~~~
-$ git clone https://github.com/thangtcm/Fastion-Management-System.git
+$ git clone https://github.com/thangtcm/Fashtion-Management-System.git
 ~~~~
 
 **Connect SQL Server**
