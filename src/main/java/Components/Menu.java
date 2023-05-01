@@ -4,73 +4,118 @@
  */
 package Components;
 
+import Event.EventMenu;
+import Event.EventMenuCallBack;
 import Event.EventMenuSelected;
-import Model.ModelMenu;
-import Swing.MenuItem;
+import Model.Model_Menu;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.border.EmptyBorder;
-import net.miginfocom.swing.MigLayout;
+import java.awt.image.BufferedImage;
+import org.jdesktop.animation.timing.Animator;
+import org.jdesktop.animation.timing.TimingTarget;
+import org.jdesktop.animation.timing.TimingTargetAdapter;
+import shadow.ShadowBorder;
+import swing.Panel.PanelShadow;
 
 /**
  *
  * @author couni
  */
-public class Menu extends javax.swing.JPanel {
+public class Menu extends PanelShadow {
 
     /**
      * Creates new form Menu
      */
-    private MigLayout layout;
-    //private JPanel panelMenu;
-    private JButton cmdMenu;
-    private EventMenuSelected event;
+    private int selectedIndex = -1;
+    private double menuTarget;
+    private double menuLastTarget;
+    private double currentLocation;
+    private BufferedImage selectedImage;
+    private Animator animator;
+    private EventMenuCallBack callBack;
+    private EventMenu event;
     public Menu() {
         initComponents();
-        setOpaque(false);
         init();
     }
-    public void setEvent(EventMenuSelected event) {
-        this.event = event;
-    }
-    
+
     private void init() {
-        setLayout(new MigLayout("wrap, fillx, insets 0", "[fill]", "5[]0[]push[60]0"));
-        createButtonMenu();
-        panelMenu.setOpaque(false);
-        layout = new MigLayout("fillx, wrap", "0[fill]0", "50[]3[]0");
-        panelMenu.setLayout(layout);
-        add(cmdMenu, "pos 1al 0al 100% 50");
-        
-    }
-
-    public void addMenu(ModelMenu menu) {
-        MenuItem item = new MenuItem(menu.getIcon(), menu.getMenuName(), panelMenu.getComponentCount());
-        item.addEvent((int index) -> {
-            System.out.println(".selected()");
-            clearMenu(index);
+        setRadius(20);
+        initData();
+        listMenu.addEventSelectedMenu(new EventMenuSelected() {
+            @Override
+            public void menuSelected(int index, EventMenuCallBack callBack) {
+                if (!animator.isRunning()) {
+                    if (index != selectedIndex) {
+                        Menu.this.callBack = callBack;
+                        selectedIndex = index;
+                        menuTarget = selectedIndex * 55 + listMenu.getY();
+                        animator.start();
+                    }
+                }
+            }
         });
-        item.addEvent(event);
-        panelMenu.add(item);
+        TimingTarget target = new TimingTargetAdapter() {
+            @Override
+            public void timingEvent(float fraction) {
+                currentLocation = (menuTarget - menuLastTarget) * fraction;
+                currentLocation += menuLastTarget;
+                repaint();
+            }
+
+            @Override
+            public void end() {
+                menuLastTarget = menuTarget;
+                callBack.call(selectedIndex);
+                if (event != null) {
+                    event.menuIndexChange(selectedIndex);
+                }
+            }
+        };
+        animator = new Animator(300, target);
+        animator.setResolution(1);
+        animator.setAcceleration(0.5f);
+        animator.setDeceleration(0.5f);
     }
 
-    private void createButtonMenu() {
-        cmdMenu = new JButton();
-        cmdMenu.setContentAreaFilled(false);
-        cmdMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        cmdMenu.setIcon(new ImageIcon(getClass().getResource("/Images/Icons/menu.png")));
-        cmdMenu.setBorder(new EmptyBorder(20, 5, 15, 5));
-        
+    public void setSelectedIndex(int index) {
+        selectedIndex = index;
+        menuTarget = selectedIndex * 55 + listMenu.getY();
+        menuLastTarget = menuTarget;
+        currentLocation = menuLastTarget;
+        listMenu.selectedIndex(index);
+        repaint();
     }
+
+    private void initData() {
+        listMenu.addItem(new Model_Menu("1", "Dashboard", Model_Menu.MenuType.MENU));
+        listMenu.addItem(new Model_Menu("2", "Order", Model_Menu.MenuType.MENU));
+        listMenu.addItem(new Model_Menu("3", "Customer", Model_Menu.MenuType.MENU));
+        listMenu.addItem(new Model_Menu("4", "Products", Model_Menu.MenuType.MENU));
+        listMenu.addItem(new Model_Menu("5", "Staff", Model_Menu.MenuType.MENU));
+        listMenu.addItem(new Model_Menu("", "", Model_Menu.MenuType.EMPTY));
+    }
+
+    private void createImages() {
+        int width = getWidth() - 30;
+        selectedImage = ShadowBorder.getInstance().createShadowOut(width, 55, 8, 8, new Color(242, 246, 253));
+    }
+
+    @Override
+    public void setBounds(int i, int i1, int i2, int i3) {
+        super.setBounds(i, i1, i2, i3);
+        createImages();
+    }
+
+    @Override
+    protected void paintComponent(Graphics grphcs) {
+        super.paintComponent(grphcs);
+        if (selectedIndex >= 0) {
+            grphcs.drawImage(selectedImage, 15, (int) currentLocation, null);
+        }
+    }
+
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,97 +125,32 @@ public class Menu extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        header = new Components.Header();
-        panelMenu = new javax.swing.JPanel();
+        listMenu = new swing.Menu.ListMenu<>();
 
-        javax.swing.GroupLayout panelMenuLayout = new javax.swing.GroupLayout(panelMenu);
-        panelMenu.setLayout(panelMenuLayout);
-        panelMenuLayout.setHorizontalGroup(
-            panelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        panelMenuLayout.setVerticalGroup(
-            panelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 615, Short.MAX_VALUE)
-        );
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        listMenu.setOpaque(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(header, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addComponent(listMenu, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(header, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(panelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(listMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        //GradientPaint gra = new GradientPaint(0, 0, Color.decode("#4F62CB"), 0, getHeight(), Color.decode("#4F62CB"));
-        Color gra = new Color(79,89,203);
-        g2.setPaint(gra);
-        g2.fillRect(0, 0, getWidth(), getHeight());
-        super.paintComponent(g);
-    }
     
-    public JButton getCmdMenu()
-    {
-        return cmdMenu;
-    }
-    
-    public void addEventMenu(ActionListener event) {
-        cmdMenu.addActionListener(event);
-        System.out.println("Click Bar");
-    }
-    
-    public void addEventLogo(ActionListener event)
-    {
-        header.getLogo().addMouseListener(new MouseAdapter(){
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                //cmdMenu.doClick();
-                event.actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
-                System.out.println("Click Logo");
-            }
-        });
-    }
-    
-    
-    
-    public void HideShowBar(boolean Status)
-    {
-        if(Status)
-            cmdMenu.setIcon(new ImageIcon(getClass().getResource("/Images/Icons/menu.png")));
-        else
-            cmdMenu.setIcon(null);
-    }
-    
-    public void setAlpha(float alpha) {
-        header.setAlpha(alpha);
-    }
-    
-    private void clearMenu(int exceptIndex) {
-        for (Component com : panelMenu.getComponents()) {
-            MenuItem item = (MenuItem) com;
-            if (item.getIndex() != exceptIndex) {
-                item.setSelected(false);
-            }
-        }
+    public void addEvent(EventMenu event) {
+        this.event = event;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private Components.Header header;
-    private javax.swing.JPanel panelMenu;
+    private swing.Menu.ListMenu<String> listMenu;
     // End of variables declaration//GEN-END:variables
 }
