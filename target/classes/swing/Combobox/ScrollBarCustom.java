@@ -4,7 +4,6 @@
  */
 package swing.Combobox;
 
-import Swing.ModernScrollBarUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JScrollBar;

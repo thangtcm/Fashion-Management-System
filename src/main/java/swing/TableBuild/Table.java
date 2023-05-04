@@ -31,9 +31,6 @@ public class Table extends JTable {
             @Override
             public Component getTableCellRendererComponent(JTable jtable, Object o, boolean bln, boolean bln1, int i, int i1) {
                 TableHeader header = new TableHeader(o + "");
-//                if (i1 == 1) { // Nếu đang xử lý cột thứ 2
-//                    getColumnModel().getColumn(1).setPreferredWidth(150);
-//                }
                 return header;
             }
         });
@@ -110,5 +107,4 @@ public class Table extends JTable {
         scroll.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
         scroll.setBorder(new EmptyBorder(5, 10, 5, 10));
     }
-
 }

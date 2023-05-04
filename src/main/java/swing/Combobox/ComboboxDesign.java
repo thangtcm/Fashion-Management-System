@@ -4,7 +4,6 @@
  */
 package swing.Combobox;
 
-import Swing.Scroll.ScrollBar;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FontMetrics;
@@ -175,7 +174,7 @@ public class ComboboxDesign<E> extends JComboBox<E> {
                     list.setFixedCellHeight(30);
                     JScrollPane scroll = new JScrollPane(list);
                     scroll.setBackground(Color.WHITE);
-                    ScrollBar sb = new ScrollBar();
+                    ScrollBarCustom sb = new ScrollBarCustom();
                     sb.setUnitIncrement(30);
                     sb.setForeground(new Color(180, 180, 180));
                     scroll.setVerticalScrollBar(sb);
