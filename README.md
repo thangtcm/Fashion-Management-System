@@ -1,10 +1,10 @@
-# Fashtion Management System
+# Fashion Management System
 
 ![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
-![Repo Size](https://img.shields.io/github/repo-size/thangtcm/Fashtion-Management-System) 
-![count](https://img.shields.io/github/languages/count/thangtcm/Fashtion-Management-System) 
-![count](https://img.shields.io/github/forks/thangtcm/Fashtion-Management-System) 
-![count](https://img.shields.io/github/watchers/thangtcm/Fashtion-Management-System) 
+![Repo Size](https://img.shields.io/github/repo-size/thangtcm/Fashion-Management-System) 
+![count](https://img.shields.io/github/languages/count/thangtcm/Fashion-Management-System) 
+![count](https://img.shields.io/github/forks/thangtcm/Fashion-Management-System) 
+![count](https://img.shields.io/github/watchers/thangtcm/Fashion-Management-System) 
 
 ## Introduction 🎉
 Fashion Management System (FMS) is a management system designed to support businesses in the fashion industry in managing their business operations. FMS provides tools for managing production, inventory, sales, finance, and customer management.
@@ -52,7 +52,7 @@ With the increasing growth of the fashion industry and the growing competition, 
 </li>
 </ol>
 
-<p>With the efforts of our team members, we have successfully developed a Fashtion Management System that meets the project requirements and exceeds the satisfaction of the stakeholders involved in the project.</p>
+<p>With the efforts of our team members, we have successfully developed a Fashion Management System that meets the project requirements and exceeds the satisfaction of the stakeholders involved in the project.</p>
 
 
 ## Technology stack 💎💎
@@ -77,7 +77,7 @@ With the increasing growth of the fashion industry and the growing competition, 
 **Getting and Building Sources**
 
 ~~~~
-$ git clone https://github.com/thangtcm/Fashtion-Management-System.git
+$ git clone https://github.com/thangtcm/Fashion-Management-System.git
 ~~~~
 
 **Connect SQL Server**
